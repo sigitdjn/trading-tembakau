@@ -25,13 +25,13 @@
                     </div>
                 </div>
                 <div class="mt-3 sm:mt-0 flex flex-wrap gap-2">
-                    <button onclick="window.switchTab('ops')" id="btn-ops" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-800 text-white transition cursor-pointer">Dashboard Operasional</button>
-                    <button onclick="window.switchTab('finance')" id="btn-finance" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Dashboard Keuangan</button>
-                    <button onclick="window.switchTab('approval')" id="btn-approval" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition relative cursor-pointer">
+                    <button onclick="switchTab('ops')" id="btn-ops" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-800 text-white transition cursor-pointer">Dashboard Operasional</button>
+                    <button onclick="switchTab('finance')" id="btn-finance" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Dashboard Keuangan</button>
+                    <button onclick="switchTab('approval')" id="btn-approval" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition relative cursor-pointer">
                         Review WA 
                         <span id="badge-pending" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
                     </button>
-                    <button onclick="window.switchTab('input')" id="btn-input" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Simulasi Kirim WA</button>
+                    <button onclick="switchTab('input')" id="btn-input" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Simulasi Kirim WA</button>
                 </div>
             </div>
         </header>
@@ -45,12 +45,12 @@
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div class="flex items-center space-x-3 w-full sm:w-auto">
                         <label class="font-bold text-sm text-slate-700 whitespace-nowrap"><i class="fa-solid fa-layer-group text-amber-800 mr-1"></i> Pilih Periode Lot:</label>
-                        <select id="lot-selector" onchange="window.changeActiveLot(this.value)" class="p-2 border border-slate-300 rounded-lg text-sm font-bold bg-amber-50 text-amber-900 outline-none w-full sm:w-48 cursor-pointer">
+                        <select id="lot-selector" onchange="changeActiveLot(this.value)" class="p-2 border border-slate-300 rounded-lg text-sm font-bold bg-amber-50 text-amber-900 outline-none w-full sm:w-48 cursor-pointer">
                         </select>
                     </div>
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                        <span id="lot-status-badge" class="px-3 py-1 text-xs font-bold rounded-full bg-amber-100 text-amber-800">Status: Memuat Cloud...</span>
-                        <button onclick="window.toggleCloseLot()" id="btn-toggle-lot" class="px-3 py-1 text-xs font-bold bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition cursor-pointer">Tandai Lot Selesai</button>
+                        <span id="lot-status-badge" class="px-3 py-1 text-xs font-bold rounded-full bg-amber-100 text-amber-800">Status: Aktif (Pengumpulan)</span>
+                        <button onclick="toggleCloseLot()" id="btn-toggle-lot" class="px-3 py-1 text-xs font-bold bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition cursor-pointer">Tandai Lot Selesai</button>
                     </div>
                 </div>
 
@@ -58,12 +58,12 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                         <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Tembakau Dikumpulkan</div>
-                        <div id="ops-berat-beli" class="text-2xl font-bold text-slate-900 mt-1">0 Kg</div>
+                        <div id="ops-berat-beli" class="text-2xl font-bold text-slate-900 mt-1">5000 Kg</div>
                         <div class="text-xs text-slate-400 mt-2">Gudang Transit Lombok</div>
                     </div>
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                         <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Status Perjalanan Truk Fuso</div>
-                        <div id="ops-status-truk" class="text-lg font-bold text-amber-700 mt-1">Menunggu Data Cloud</div>
+                        <div id="ops-status-truk" class="text-lg font-bold text-amber-700 mt-1">Pengumpulan di Gudang Lombok</div>
                         <div class="text-xs text-slate-400 mt-2">Lombok ke Bojonegoro</div>
                     </div>
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
@@ -77,13 +77,13 @@
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="font-bold text-slate-800 text-sm">Progress Logistik Pengumpulan Menuju Truk (Target 20 Ton)</h3>
-                        <span id="target-status-text" class="text-xs font-semibold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full">Sinkronisasi Cloud...</span>
+                        <span id="target-status-text" class="text-xs font-semibold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full">Pengumpulan Lombok (25.0% dari 20 Ton)</span>
                     </div>
                     <div class="w-full bg-slate-100 rounded-full h-3 mb-2 overflow-hidden">
-                        <div id="progress-bar" class="bg-amber-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        <div id="progress-bar" class="bg-amber-600 h-3 rounded-full transition-all duration-500" style="width: 25%"></div>
                     </div>
                     <div class="flex justify-between text-xs text-slate-500">
-                        <span id="current-weight">0 Kg</span>
+                        <span id="current-weight">5000 Kg</span>
                         <span>Target: 20.000 Kg (20 Ton)</span>
                     </div>
                 </div>
@@ -137,8 +137,8 @@
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <div class="flex justify-between items-center mb-4">
                         <div>
-                            <h3 class="font-bold text-lg text-slate-800">Kotak Masuk Review Pesan WhatsApp (Cloud)</h3>
-                            <p class="text-xs text-slate-500">Laporan dari lapangan yang dikirim via bot masuk ke sini secara real-time. Periksa data sebelum klik Setujui.</p>
+                            <h3 class="font-bold text-lg text-slate-800">Kotak Masuk Review Pesan WhatsApp</h3>
+                            <p class="text-xs text-slate-500">Laporan dari operator lapangan masuk ke sini. Periksa data sebelum klik Setujui agar data resmi terposting ke dashboard.</p>
                         </div>
                         <span id="pending-count-badge" class="px-3 py-1 bg-amber-100 text-amber-800 font-bold rounded-full text-xs">0 Menunggu</span>
                     </div>
@@ -150,7 +150,7 @@
             <div id="tab-input" class="hidden max-w-2xl mx-auto space-y-6">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h3 class="font-bold text-lg text-slate-800 mb-2">Simulasi Pengiriman Pesan WhatsApp Operator</h3>
-                    <p class="text-xs text-slate-500 mb-4">Mewakili agen di Lombok atau tim Bojonegoro yang mengirim laporan ke cloud database.</p>
+                    <p class="text-xs text-slate-500 mb-4">Mewakili agen di Lombok atau tim Bojonegoro yang mengirim laporan ke bot WhatsApp.</p>
 
                     <div class="mb-4">
                         <label class="block text-xs font-medium text-slate-700 mb-1">Pengirim Lapangan</label>
@@ -163,13 +163,13 @@
                     </div>
 
                     <div class="grid grid-cols-3 gap-2 mb-4">
-                        <button onclick="window.switchInputForm('beli')" id="btn-form-beli" class="py-2 text-xs font-bold rounded-lg bg-amber-900 text-white cursor-pointer">Pembelian Lombok</button>
-                        <button onclick="window.switchInputForm('biaya')" id="btn-form-biaya" class="py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Biaya Logistik</button>
-                        <button onclick="window.switchInputForm('jual')" id="btn-form-jual" class="py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Penjualan Bojonegoro</button>
+                        <button onclick="switchInputForm('beli')" id="btn-form-beli" class="py-2 text-xs font-bold rounded-lg bg-amber-900 text-white cursor-pointer">Pembelian Lombok</button>
+                        <button onclick="switchInputForm('biaya')" id="btn-form-biaya" class="py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Biaya Logistik</button>
+                        <button onclick="switchInputForm('jual')" id="btn-form-jual" class="py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Penjualan Bojonegoro</button>
                     </div>
 
                     <!-- FORM 1 -->
-                    <form id="form-beli" onsubmit="window.handleInputWA(event, 'beli')" class="space-y-4">
+                    <form id="form-beli" onsubmit="handleInputWA(event, 'beli')" class="space-y-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Nama Petani / Supplier</label>
                             <input type="text" id="beli-supplier" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="Pak Tani Praya">
@@ -188,11 +188,11 @@
                             <label class="block text-xs font-medium text-slate-700 mb-1">Harga Beli per Kg (IDR)</label>
                             <input type="number" id="beli-harga" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="45000">
                         </div>
-                        <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Review WA</button>
+                        <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Kotak Masuk Review WA</button>
                     </form>
 
                     <!-- FORM 2 -->
-                    <form id="form-biaya" onsubmit="window.handleInputWA(event, 'biaya')" class="space-y-4 hidden">
+                    <form id="form-biaya" onsubmit="handleInputWA(event, 'biaya')" class="space-y-4 hidden">
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Kategori Biaya</label>
                             <select id="biaya-kategori" class="w-full p-2 text-sm border border-slate-300 rounded-lg font-semibold text-amber-900">
@@ -209,11 +209,11 @@
                             <label class="block text-xs font-medium text-slate-700 mb-1">Nominal Biaya (IDR)</label>
                             <input type="number" id="biaya-nominal" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="8500000">
                         </div>
-                        <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Review WA</button>
+                        <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Kotak Masuk Review WA</button>
                     </form>
 
                     <!-- FORM 3 -->
-                    <form id="form-jual" onsubmit="window.handleInputWA(event, 'jual')" class="space-y-4 hidden">
+                    <form id="form-jual" onsubmit="handleInputWA(event, 'jual')" class="space-y-4 hidden">
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Nama Pembeli (Buyer di Bojonegoro)</label>
                             <input type="text" id="jual-pembeli" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="Gudang Rokok Bojonegoro">
@@ -232,96 +232,38 @@
                             <label class="block text-xs font-medium text-slate-700 mb-1">Harga Jual per Kg (IDR)</label>
                             <input type="number" id="jual-harga" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="60000">
                         </div>
-                        <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Review WA</button>
+                        <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Kotak Masuk Review WA</button>
                     </form>
                 </div>
             </div>
         </main>
 
         <footer class="text-center py-4 text-xs text-slate-400 border-t border-slate-200 mt-auto">
-            Sistem Cloud Trading Tembakau &copy; 2026 - Powered by Firebase Realtime Cloud
+            Sistem Transparansi Trading Tembakau &copy; 2026 - Dual Dashboard (Operasional & Keuangan)
         </footer>
     </div>
 
-    <!-- Firebase SDK & Global Handlers -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <!-- Script Utama (Mandiri tanpa bergantung environment Gemini) -->
+    <script>
+        let lotsData = {};
+        for(let i = 1; i <= 12; i++) {
+            lotsData[`Lot ${i}`] = {
+                status: i === 1 ? 'Aktif (Pengumpulan)' : 'Belum Dimulai',
+                beli: i === 1 ? [
+                    { tanggal: '12/08/2026', supplier: 'Pak Tani Praya', grade: 'Grade A', berat: 5000, harga: 45000 }
+                ] : [],
+                biaya: i === 1 ? [
+                    { tanggal: '18/08/2026', kategori: 'Biaya di Lombok', ket: 'Gudang transit', nominal: 1500000 }
+                ] : [],
+                jual: []
+            };
+        }
 
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        let pendingQueue = [
+            { id: 1, sender: 'Andi (Petugas Lombok)', lot: 'Lot 1', type: 'beli', data: { tanggal: '20/08/2026', supplier: 'Kelompok Tani Praya Timur', grade: 'Grade B', berat: 3000, harga: 40000 } }
+        ];
 
-        let currentUser = null;
         let activeLot = 'Lot 1';
-        let cloudLotsData = {};
-        let cloudPendingQueue = [];
-
-        async function initDefaultData() {
-            for(let i = 1; i <= 12; i++) {
-                let lotName = `Lot ${i}`;
-                let lotRef = doc(db, 'artifacts', appId, 'public', 'data', 'lots_collection', lotName);
-                let snap = await getDoc(lotRef);
-                if(!snap.exists()) {
-                    await setDoc(lotRef, {
-                        status: i === 1 ? 'Aktif (Pengumpulan)' : 'Belum Dimulai',
-                        beli: i === 1 ? [{ tanggal: '12/08/2026', supplier: 'Pak Tani Praya', grade: 'Grade A', berat: 5000, harga: 45000 }] : [],
-                        biaya: i === 1 ? [{ tanggal: '18/08/2026', kategori: 'Biaya di Lombok', ket: 'Gudang transit', nominal: 1500000 }] : [],
-                        jual: []
-                    });
-                }
-            }
-        }
-
-        async function startAuth() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (err) {
-                console.error("Auth error:", err);
-            }
-        }
-
-        startAuth();
-
-        onAuthStateChanged(auth, async (user) => {
-            currentUser = user;
-            if (user) {
-                await initDefaultData();
-                setupRealtimeListeners();
-            }
-        });
-
-        function setupRealtimeListeners() {
-            if (!currentUser) return;
-
-            const lotsCol = collection(db, 'artifacts', appId, 'public', 'data', 'lots_collection');
-            onSnapshot(lotsCol, (snapshot) => {
-                snapshot.forEach((docSnap) => {
-                    cloudLotsData[docSnap.id] = docSnap.data();
-                });
-                renderAll();
-            }, (error) => {
-                console.error("Gagal memuat data lot:", error);
-            });
-
-            const queueCol = collection(db, 'artifacts', appId, 'public', 'data', 'approval_queue');
-            onSnapshot(queueCol, (snapshot) => {
-                cloudPendingQueue = [];
-                snapshot.forEach((docSnap) => {
-                    cloudPendingQueue.push({ firestoreId: docSnap.id, ...docSnap.data() });
-                });
-                renderAll();
-            }, (error) => {
-                console.error("Gagal memuat antrean WA:", error);
-            });
-        }
 
         function initLotDropdowns() {
             const selector = document.getElementById('lot-selector');
@@ -333,12 +275,12 @@
 
             for(let i = 1; i <= 12; i++) {
                 let lotName = `Lot ${i}`;
-                let lotData = cloudLotsData[lotName] || { status: 'Memuat...' };
-                selector.innerHTML += `<option value="${lotName}">${lotName} — [${lotData.status}]</option>`;
+                let status = lotsData[lotName].status;
+                selector.innerHTML += `<option value="${lotName}">${lotName} — [${status}]</option>`;
                 inputSelector.innerHTML += `<option value="${lotName}">${lotName}</option>`;
             }
             selector.value = activeLot;
-            const finLabel = document.getElementById('fin-active-lot-label');
+            let finLabel = document.getElementById('fin-active-lot-label');
             if(finLabel) finLabel.innerText = activeLot;
         }
 
@@ -354,7 +296,7 @@
         }
 
         function renderDashboardOps() {
-            const currentLotData = cloudLotsData[activeLot];
+            const currentLotData = lotsData[activeLot];
             if(!currentLotData) return;
 
             const badge = document.getElementById('lot-status-badge');
@@ -370,56 +312,53 @@
                 }
             }
 
-            let totalBeratBeli = (currentLotData.beli || []).reduce((sum, item) => sum + item.berat, 0);
-            let totalBeratJual = (currentLotData.jual || []).reduce((sum, item) => sum + item.berat, 0);
+            let totalBeratBeli = currentLotData.beli.reduce((sum, item) => sum + item.berat, 0);
+            let totalBeratJual = currentLotData.jual.reduce((sum, item) => sum + item.berat, 0);
 
-            const bBeli = document.getElementById('ops-berat-beli');
-            const bJual = document.getElementById('ops-berat-jual');
-            if(bBeli) bBeli.innerText = totalBeratBeli + ' Kg';
-            if(bJual) bJual.innerText = totalBeratJual + ' Kg';
+            document.getElementById('ops-berat-beli').innerText = totalBeratBeli + ' Kg';
+            document.getElementById('ops-berat-jual').innerText = totalBeratJual + ' Kg';
 
             let trukStatus = 'Pengumpulan di Gudang Lombok';
             if(totalBeratBeli >= 20000) trukStatus = 'Truk Berangkat / Tiba di Bojonegoro';
             else if(totalBeratBeli === 0) trukStatus = 'Menunggu Target 20 Ton';
-            
-            const tStatus = document.getElementById('ops-status-truk');
-            if(tStatus) tStatus.innerText = trukStatus;
+            document.getElementById('ops-status-truk').innerText = trukStatus;
 
             let targetKg = 20000;
             let percent = Math.min(100, (totalBeratBeli / targetKg) * 100);
-            const pBar = document.getElementById('progress-bar');
-            const cWeight = document.getElementById('current-weight');
-            const tText = document.getElementById('target-status-text');
-            
-            if(pBar) pBar.style.width = percent + '%';
-            if(cWeight) cWeight.innerText = totalBeratBeli + ' Kg';
-            if(tText) tText.innerText = `Pengumpulan Lombok (${percent.toFixed(1)}% dari 20 Ton)`;
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('current-weight').innerText = totalBeratBeli + ' Kg';
+
+            let statusText = document.getElementById('target-status-text');
+            if(totalBeratBeli >= targetKg) {
+                statusText.innerText = 'Target 20 Ton Tercapai - Siap Kirim Fuso';
+                statusText.className = 'text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full';
+            } else {
+                statusText.innerText = `Pengumpulan Lombok (${percent.toFixed(1)}% dari 20 Ton)`;
+                statusText.className = 'text-xs font-semibold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full';
+            }
         }
 
         function renderDashboardFinance() {
-            const currentLotData = cloudLotsData[activeLot];
+            const currentLotData = lotsData[activeLot];
             if(!currentLotData) return;
 
-            let totalBeli = (currentLotData.beli || []).reduce((sum, item) => sum + (item.berat * item.harga), 0);
-            let totalBiaya = (currentLotData.biaya || []).reduce((sum, item) => sum + item.nominal, 0);
-            let totalOmzet = (currentLotData.jual || []).reduce((sum, item) => sum + (item.berat * item.harga), 0);
+            let totalBeli = currentLotData.beli.reduce((sum, item) => sum + (item.berat * item.harga), 0);
+            let totalBiaya = currentLotData.biaya.reduce((sum, item) => sum + item.nominal, 0);
+            let totalOmzet = currentLotData.jual.reduce((sum, item) => sum + (item.berat * item.harga), 0);
 
             let totalKeluar = totalBeli + totalBiaya;
             let totalMasuk = totalOmzet;
             let netProfit = totalMasuk - totalKeluar;
 
-            const fIn = document.getElementById('fin-in');
-            const fOut = document.getElementById('fin-out');
-            const fNet = document.getElementById('fin-net');
-            if(fIn) fIn.innerText = formatRupiah(totalMasuk);
-            if(fOut) fOut.innerText = formatRupiah(totalKeluar);
-            if(fNet) fNet.innerText = formatRupiah(netProfit);
+            document.getElementById('fin-in').innerText = formatRupiah(totalMasuk);
+            document.getElementById('fin-out').innerText = formatRupiah(totalKeluar);
+            document.getElementById('fin-net').innerText = formatRupiah(netProfit);
 
             const tbody = document.getElementById('table-cashflow');
             if(!tbody) return;
             tbody.innerHTML = '';
 
-            (currentLotData.beli || []).forEach(item => {
+            currentLotData.beli.forEach(item => {
                 let sub = item.berat * item.harga;
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50">
@@ -432,7 +371,7 @@
                 `;
             });
 
-            (currentLotData.biaya || []).forEach(item => {
+            currentLotData.biaya.forEach(item => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50">
                         <td class="p-3">${item.tanggal}</td>
@@ -444,7 +383,7 @@
                 `;
             });
 
-            (currentLotData.jual || []).forEach(item => {
+            currentLotData.jual.forEach(item => {
                 let sub = item.berat * item.harga;
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50">
@@ -467,17 +406,17 @@
             const badgeCount = document.getElementById('badge-pending');
             const countText = document.getElementById('pending-count-badge');
             
-            if(badgeCount) badgeCount.innerText = cloudPendingQueue.length;
-            if(countText) countText.innerText = `${cloudPendingQueue.length} Menunggu`;
+            if(badgeCount) badgeCount.innerText = pendingQueue.length;
+            if(countText) countText.innerText = `${pendingQueue.length} Menunggu`;
             if(!container) return;
             container.innerHTML = '';
 
-            if(cloudPendingQueue.length === 0) {
-                container.innerHTML = `<div class="p-6 text-center text-slate-400 bg-slate-50 rounded-xl">Tidak ada pesan masuk WA yang menunggu review di Cloud.</div>`;
+            if(pendingQueue.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-slate-400 bg-slate-50 rounded-xl">Tidak ada pesan masuk WA yang menunggu review.</div>`;
                 return;
             }
 
-            cloudPendingQueue.forEach((item, index) => {
+            pendingQueue.forEach((item, index) => {
                 let detailText = '';
                 if(item.type === 'beli') detailText = `<strong>Beli (${item.lot}):</strong> ${item.data.supplier} — ${item.data.berat} Kg @ ${formatRupiah(item.data.harga)}`;
                 else if(item.type === 'biaya') detailText = `<strong>Biaya (${item.lot}):</strong> [${item.data.kategori}] ${item.data.ket} — ${formatRupiah(item.data.nominal)}`;
@@ -490,19 +429,16 @@
                             <div class="text-sm text-slate-800">${detailText}</div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="window.approveCloudItem('${item.firestoreId}', ${index})" class="px-3 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-xs hover:bg-emerald-700 cursor-pointer">Setujui & Post</button>
-                            <button onclick="window.rejectCloudItem('${item.firestoreId}')" class="px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg text-xs hover:bg-red-200 cursor-pointer">Tolak</button>
+                            <button onclick="approveItem(${index})" class="px-3 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-xs hover:bg-emerald-700 cursor-pointer">Setujui & Post</button>
+                            <button onclick="rejectItem(${index})" class="px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg text-xs hover:bg-red-200 cursor-pointer">Tolak</button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        // Ekspose Fungsi ke Global Window agar tombol dapat merespons
-        window.handleInputWA = async function(e, type) {
+        function handleInputWA(e, type) {
             e.preventDefault();
-            if (!currentUser) return;
-
             const sender = document.getElementById('input-sender').value;
             const lot = document.getElementById('input-lot-id').value;
             const today = new Date().toLocaleDateString('id-ID');
@@ -516,81 +452,46 @@
                 data = { tanggal: today, pembeli: document.getElementById('jual-pembeli').value, grade: document.getElementById('jual-grade').value, berat: Number(document.getElementById('jual-berat').value), harga: Number(document.getElementById('jual-harga').value) };
             }
 
-            try {
-                const queueCol = collection(db, 'artifacts', appId, 'public', 'data', 'approval_queue');
-                await addDoc(queueCol, { sender, lot, type, data, timestamp: Date.now() });
-                alert('Laporan berhasil dikirim ke Cloud Database!');
-                e.target.reset();
-                window.switchTab('approval');
-            } catch (err) {
-                console.error("Gagal mengirim ke cloud:", err);
-                alert("Terjadi kesalahan saat mengirim data ke cloud.");
+            pendingQueue.push({ id: Date.now(), sender, lot, type, data });
+            alert('Laporan berhasil dikirim ke antrean review admin!');
+            e.target.reset();
+            switchTab('approval');
+            renderAll();
+        }
+
+        function approveItem(index) {
+            let item = pendingQueue[index];
+            lotsData[item.lot][item.type].push(item.data);
+            pendingQueue.splice(index, 1);
+            alert('Data disetujui dan resmi terposting ke Dashboard!');
+            renderAll();
+        }
+
+        function rejectItem(index) {
+            if(confirm('Tolak laporan ini?')) {
+                pendingQueue.splice(index, 1);
+                renderAll();
             }
         }
 
-        window.approveCloudItem = async function(firestoreId, index) {
-            if (!currentUser) return;
-            let item = cloudPendingQueue[index];
-            if(!item) return;
-
-            try {
-                let lotName = item.lot;
-                let currentLotData = cloudLotsData[lotName] || { status: 'Aktif (Pengumpulan)', beli: [], biaya: [], jual: [] };
-                
-                if(!currentLotData[item.type]) currentLotData[item.type] = [];
-                currentLotData[item.type].push(item.data);
-
-                const lotRef = doc(db, 'artifacts', appId, 'public', 'data', 'lots_collection', lotName);
-                await setDoc(lotRef, currentLotData);
-
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'approval_queue', firestoreId);
-                await deleteDoc(docRef);
-
-                alert('Data berhasil disetujui dan diperbarui di Cloud!');
-            } catch(err) {
-                console.error("Gagal menyetujui item:", err);
-                alert("Gagal memproses persetujuan data.");
-            }
-        }
-
-        window.rejectCloudItem = async function(firestoreId) {
-            if (!currentUser) return;
-            if(confirm('Tolak laporan ini dari cloud?')) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'approval_queue', firestoreId);
-                    await deleteDoc(docRef);
-                } catch(err) {
-                    console.error("Gagal menolak item:", err);
-                }
-            }
-        }
-
-        window.changeActiveLot = function(lotName) {
+        function changeActiveLot(lotName) {
             activeLot = lotName;
             renderAll();
         }
 
-        window.toggleCloseLot = async function() {
-            if (!currentUser) return;
-            let currentLotData = cloudLotsData[activeLot];
-            if(!currentLotData) return;
-
-            if(currentLotData.status.includes('Selesai')) {
-                currentLotData.status = 'Aktif (Berjalan)';
+        function toggleCloseLot() {
+            let currentStatus = lotsData[activeLot].status;
+            if(currentStatus.includes('Selesai')) {
+                lotsData[activeLot].status = 'Aktif (Berjalan)';
+                alert(`${activeLot} dibuka kembali.`);
             } else {
-                currentLotData.status = 'Selesai (Closed)';
+                lotsData[activeLot].status = 'Selesai (Closed)';
+                alert(`${activeLot} ditandai selesai.`);
             }
-
-            try {
-                const lotRef = doc(db, 'artifacts', appId, 'public', 'data', 'lots_collection', activeLot);
-                await setDoc(lotRef, currentLotData);
-                alert(`Status ${activeLot} diperbarui di Cloud.`);
-            } catch(err) {
-                console.error("Gagal mengubah status lot:", err);
-            }
+            renderAll();
         }
 
-        window.switchTab = function(tab) {
+        function switchTab(tab) {
             ['ops', 'finance', 'approval', 'input'].forEach(t => {
                 let el = document.getElementById(`tab-${t}`);
                 let btn = document.getElementById(`btn-${t}`);
@@ -603,7 +504,7 @@
             if(targetBtn) targetBtn.className = 'px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-800 text-white transition cursor-pointer';
         }
 
-        window.switchInputForm = function(type) {
+        function switchInputForm(type) {
             ['beli', 'biaya', 'jual'].forEach(t => {
                 let form = document.getElementById(`form-${t}`);
                 let btn = document.getElementById(`btn-form-${t}`);
@@ -615,6 +516,8 @@
             if(targetForm) targetForm.classList.remove('hidden');
             if(targetBtn) targetBtn.className = 'py-2 text-xs font-bold rounded-lg bg-amber-900 text-white cursor-pointer';
         }
+
+        renderAll();
     </script>
 </body>
 </html>
