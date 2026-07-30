@@ -20,8 +20,8 @@
                         <i class="fa-solid fa-seedling text-2xl text-amber-200"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold">Trading Tembakau Lombok - Bojonegoro (Cloud)</h1>
-                        <p class="text-xs text-amber-200">Sinkronisasi Cloud Real-Time untuk Investor & Lapangan</p>
+                        <h1 class="text-xl font-bold">Trading Tembakau Lombok - Bojonegoro</h1>
+                        <p class="text-xs text-amber-200">Dual Dashboard: Operasional Logistik & Arus Kas Keuangan</p>
                     </div>
                 </div>
                 <div class="mt-3 sm:mt-0 flex flex-wrap gap-2">
@@ -29,7 +29,7 @@
                     <button onclick="switchTab('finance')" id="btn-finance" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Dashboard Keuangan</button>
                     <button onclick="switchTab('approval')" id="btn-approval" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition relative cursor-pointer">
                         Review WA 
-                        <span id="badge-pending" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+                        <span id="badge-pending" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">1</span>
                     </button>
                     <button onclick="switchTab('input')" id="btn-input" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Simulasi Kirim WA</button>
                 </div>
@@ -41,7 +41,6 @@
             
             <!-- DASHBOARD 1: OPERASIONAL & LOGISTIK -->
             <div id="tab-ops" class="space-y-6">
-                <!-- Selector Lot / Periode -->
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div class="flex items-center space-x-3 w-full sm:w-auto">
                         <label class="font-bold text-sm text-slate-700 whitespace-nowrap"><i class="fa-solid fa-layer-group text-amber-800 mr-1"></i> Pilih Periode Lot:</label>
@@ -54,7 +53,6 @@
                     </div>
                 </div>
 
-                <!-- Ringkasan Logistik & Fisik -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                         <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Tembakau Dikumpulkan</div>
@@ -73,7 +71,6 @@
                     </div>
                 </div>
 
-                <!-- Progress Bar Target 20 Ton -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="font-bold text-slate-800 text-sm">Progress Logistik Pengumpulan Menuju Truk (Target 20 Ton)</h3>
@@ -89,7 +86,7 @@
                 </div>
             </div>
 
-            <!-- DASHBOARD 2: KEUANGAN (Arus Kas Uang Masuk & Keluar) -->
+            <!-- DASHBOARD 2: KEUANGAN -->
             <div id="tab-finance" class="hidden space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
@@ -109,7 +106,6 @@
                     </div>
                 </div>
 
-                <!-- Tabel Arus Kas -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="p-4 bg-slate-50 border-b border-slate-200 font-bold text-slate-800 flex justify-between items-center">
                         <span>Rekapitulasi Arus Kas (Cash Flow Masuk & Keluar)</span>
@@ -132,7 +128,7 @@
                 </div>
             </div>
 
-            <!-- TAB REVIEW / APPROVAL ADMIN (Moderasi WA) -->
+            <!-- TAB REVIEW WA -->
             <div id="tab-approval" class="hidden space-y-6 max-w-4xl mx-auto">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <div class="flex justify-between items-center mb-4">
@@ -140,13 +136,13 @@
                             <h3 class="font-bold text-lg text-slate-800">Kotak Masuk Review Pesan WhatsApp</h3>
                             <p class="text-xs text-slate-500">Laporan dari operator lapangan masuk ke sini. Periksa data sebelum klik Setujui agar data resmi terposting ke dashboard.</p>
                         </div>
-                        <span id="pending-count-badge" class="px-3 py-1 bg-amber-100 text-amber-800 font-bold rounded-full text-xs">0 Menunggu</span>
+                        <span id="pending-count-badge" class="px-3 py-1 bg-amber-100 text-amber-800 font-bold rounded-full text-xs">1 Menunggu</span>
                     </div>
                     <div class="space-y-4" id="pending-list-container"></div>
                 </div>
             </div>
 
-            <!-- TAB SIMULASI KIRIM LAPORAN WA -->
+            <!-- TAB SIMULASI KIRIM WA -->
             <div id="tab-input" class="hidden max-w-2xl mx-auto space-y-6">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h3 class="font-bold text-lg text-slate-800 mb-2">Simulasi Pengiriman Pesan WhatsApp Operator</h3>
@@ -168,7 +164,6 @@
                         <button onclick="switchInputForm('jual')" id="btn-form-jual" class="py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Penjualan Bojonegoro</button>
                     </div>
 
-                    <!-- FORM 1 -->
                     <form id="form-beli" onsubmit="handleInputWA(event, 'beli')" class="space-y-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Nama Petani / Supplier</label>
@@ -191,7 +186,6 @@
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Kotak Masuk Review WA</button>
                     </form>
 
-                    <!-- FORM 2 -->
                     <form id="form-biaya" onsubmit="handleInputWA(event, 'biaya')" class="space-y-4 hidden">
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Kategori Biaya</label>
@@ -212,7 +206,6 @@
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Kotak Masuk Review WA</button>
                     </form>
 
-                    <!-- FORM 3 -->
                     <form id="form-jual" onsubmit="handleInputWA(event, 'jual')" class="space-y-4 hidden">
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Nama Pembeli (Buyer di Bojonegoro)</label>
@@ -243,7 +236,6 @@
         </footer>
     </div>
 
-    <!-- Script Utama (Mandiri tanpa bergantung environment Gemini) -->
     <script>
         let lotsData = {};
         for(let i = 1; i <= 12; i++) {
