@@ -33,7 +33,7 @@
                     <button onclick="switchTab('ops')" id="btn-ops" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-800 text-white transition cursor-pointer">Dashboard Operasional</button>
                     <button onclick="switchTab('finance')" id="btn-finance" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Dashboard Keuangan</button>
                     
-                    <!-- Menu khusus Admin (Tersembunyi untuk Viewer/Investor secara mutlak) -->
+                    <!-- Menu khusus Admin -->
                     <button onclick="switchTab('approval')" id="btn-approval" class="admin-only hidden px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition relative cursor-pointer">
                         Review WA 
                         <span id="badge-pending" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
@@ -54,12 +54,11 @@
             <!-- DASHBOARD 1: OPERASIONAL & LOGISTIK -->
             <div id="tab-ops" class="space-y-6">
                 
-                <!-- KOTAK BATCH AKTIF & FILTER LOT -->
+                <!-- ROW 1: KOTAK NO BATCH & PILIHAN LOT (1-15) -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Kotak Judul BATCH AKTIF -->
                     <div style="background: linear-gradient(135deg, #78350f, #b45309);" class="p-5 rounded-xl shadow-sm text-white flex items-center justify-between">
                         <div>
-                            <div class="text-xs uppercase tracking-wider text-amber-200 font-semibold"><i class="fa-solid fa-fire mr-1"></i> BATCH AKTIF</div>
+                            <div class="text-xs uppercase tracking-wider text-amber-200 font-semibold"><i class="fa-solid fa-fire mr-1"></i> NO BATCH</div>
                             <div id="batch-active-display" class="text-3xl font-extrabold mt-1">Lot 1</div>
                         </div>
                         <div class="bg-white/20 p-3 rounded-lg">
@@ -67,10 +66,9 @@
                         </div>
                     </div>
 
-                    <!-- Panel Pemilih Lot & Status -->
                     <div class="md:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
                         <div class="flex items-center space-x-3 w-full sm:w-auto">
-                            <label class="font-bold text-sm text-slate-700 whitespace-nowrap"><i class="fa-solid fa-layer-group text-amber-800 mr-1"></i> Pilih Lot:</label>
+                            <label class="font-bold text-sm text-slate-700 whitespace-nowrap"><i class="fa-solid fa-layer-group text-amber-800 mr-1"></i> Pilih Lot (1-15):</label>
                             <select id="lot-selector" onchange="changeActiveLot(this.value)" class="p-2 border border-slate-300 rounded-lg text-sm font-bold bg-amber-50 text-amber-900 outline-none w-full sm:w-48 cursor-pointer">
                             </select>
                         </div>
@@ -81,16 +79,17 @@
                     </div>
                 </div>
 
+                <!-- ROW 2: KOTAK TOTAL PEMBELIAN, STATUS LOADING & PENJUALAN -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Tembakau Dikumpulkan</div>
+                        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Pembelian Tembakau</div>
                         <div id="ops-berat-beli" class="text-2xl font-bold text-slate-900 mt-1">0 Kg</div>
                         <div class="text-xs text-slate-400 mt-2">Gudang Transit Lombok</div>
                     </div>
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Status Perjalanan Truk Fuso</div>
-                        <div id="ops-status-truk" class="text-lg font-bold text-amber-700 mt-1">Menunggu Data Cloud</div>
-                        <div class="text-xs text-slate-400 mt-2">Lombok ke Bojonegoro</div>
+                        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Status Loading Gudang</div>
+                        <div id="ops-status-loading" class="text-lg font-bold text-amber-700 mt-1">Menunggu Data</div>
+                        <div class="text-xs text-slate-400 mt-2">Pengumpulan & Pemuatan Fuso</div>
                     </div>
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                         <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Tembakau Terjual di Bojonegoro</div>
@@ -99,17 +98,56 @@
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-bold text-slate-800 text-sm">Progress Logistik Pengumpulan Menuju Truk (Target 20 Ton)</h3>
+                <!-- ROW 3: KOTAK STATUS PERJALANAN TRUK FUSO (DENGAN 6 TITIK RUTE) -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-truck-fast text-amber-800 mr-2"></i> Status Perjalanan Truk Fuso (Rute Logistik)</h3>
                         <span id="target-status-text" class="text-xs font-semibold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full">Sinkronisasi Cloud...</span>
                     </div>
-                    <div class="w-full bg-slate-100 rounded-full h-3 mb-2 overflow-hidden">
-                        <div id="progress-bar" class="bg-amber-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+
+                    <!-- Timeline Rute 6 Titik -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-2">
+                        <div id="step-1" class="p-3 rounded-lg border border-slate-200 bg-slate-50 text-center transition">
+                            <div class="text-xs font-bold text-slate-400 mb-1">Titik 1</div>
+                            <div class="text-xs font-semibold text-slate-700">Praya Tengah</div>
+                            <div id="badge-1" class="mt-2 text-[10px] px-2 py-0.5 rounded font-bold bg-slate-200 text-slate-600">Menunggu</div>
+                        </div>
+                        <div id="step-2" class="p-3 rounded-lg border border-slate-200 bg-slate-50 text-center transition">
+                            <div class="text-xs font-bold text-slate-400 mb-1">Titik 2</div>
+                            <div class="text-xs font-semibold text-slate-700">Pelabuhan Lombok</div>
+                            <div id="badge-2" class="mt-2 text-[10px] px-2 py-0.5 rounded font-bold bg-slate-200 text-slate-600">Menunggu</div>
+                        </div>
+                        <div id="step-3" class="p-3 rounded-lg border border-slate-200 bg-slate-50 text-center transition">
+                            <div class="text-xs font-bold text-slate-400 mb-1">Titik 3</div>
+                            <div class="text-xs font-semibold text-slate-700">Pelabuhan Perak</div>
+                            <div id="badge-3" class="mt-2 text-[10px] px-2 py-0.5 rounded font-bold bg-slate-200 text-slate-600">Menunggu</div>
+                        </div>
+                        <div id="step-4" class="p-3 rounded-lg border border-slate-200 bg-slate-50 text-center transition">
+                            <div class="text-xs font-bold text-slate-400 mb-1">Titik 4</div>
+                            <div class="text-xs font-semibold text-slate-700">Lamongan</div>
+                            <div id="badge-4" class="mt-2 text-[10px] px-2 py-0.5 rounded font-bold bg-slate-200 text-slate-600">Menunggu</div>
+                        </div>
+                        <div id="step-5" class="p-3 rounded-lg border border-slate-200 bg-slate-50 text-center transition">
+                            <div class="text-xs font-bold text-slate-400 mb-1">Titik 5</div>
+                            <div class="text-xs font-semibold text-slate-700">Babat</div>
+                            <div id="badge-5" class="mt-2 text-[10px] px-2 py-0.5 rounded font-bold bg-slate-200 text-slate-600">Menunggu</div>
+                        </div>
+                        <div id="step-6" class="p-3 rounded-lg border border-slate-200 bg-slate-50 text-center transition">
+                            <div class="text-xs font-bold text-slate-400 mb-1">Titik 6</div>
+                            <div class="text-xs font-semibold text-slate-700">Bojonegoro</div>
+                            <div id="badge-6" class="mt-2 text-[10px] px-2 py-0.5 rounded font-bold bg-slate-200 text-slate-600">Menunggu</div>
+                        </div>
                     </div>
-                    <div class="flex justify-between text-xs text-slate-500">
-                        <span id="current-weight">0 Kg</span>
-                        <span>Target: 20.000 Kg (20 Ton)</span>
+
+                    <!-- Progress Bar Target 20 Ton -->
+                    <div class="pt-2">
+                        <div class="w-full bg-slate-100 rounded-full h-3 mb-2 overflow-hidden">
+                            <div id="progress-bar" class="bg-amber-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-slate-500">
+                            <span id="current-weight">0 Kg</span>
+                            <span>Target Muatan Truk Fuso: 20.000 Kg (20 Ton)</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -205,7 +243,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-xs font-medium text-slate-700 mb-1">Pilih Nomor Lot</label>
+                        <label class="block text-xs font-medium text-slate-700 mb-1">Pilih Nomor Lot (1-15)</label>
                         <select id="input-lot-id" class="w-full p-2.5 text-sm border border-slate-300 rounded-lg font-bold bg-amber-50 text-amber-900 cursor-pointer"></select>
                     </div>
 
@@ -401,7 +439,8 @@
         async function initCloudDatabase() {
             try {
                 await signInAnonymously(auth);
-                for(let i = 1; i <= 12; i++) {
+                // Inisialisasi Lot 1 sampai 15 secara otomatis
+                for(let i = 1; i <= 15; i++) {
                     let lotName = `Lot ${i}`;
                     let lotRef = doc(db, 'trading_tembakau_db', lotName);
                     let snap = await getDoc(lotRef);
@@ -452,7 +491,8 @@
             selector.innerHTML = '';
             inputSelector.innerHTML = '';
 
-            for(let i = 1; i <= 12; i++) {
+            // Looping dari 1 sampai 15
+            for(let i = 1; i <= 15; i++) {
                 let lotName = `Lot ${i}`;
                 let lotData = cloudLotsData[lotName] || { status: 'Memuat...' };
                 selector.innerHTML += `<option value="${lotName}">${lotName} — [${lotData.status}]</option>`;
@@ -534,10 +574,55 @@
             document.getElementById('ops-berat-beli').innerText = totalBeratBeli + ' Kg';
             document.getElementById('ops-berat-jual').innerText = totalBeratJual + ' Kg';
 
-            let trukStatus = 'Pengumpulan di Gudang Lombok';
-            if(totalBeratBeli >= 20000) trukStatus = 'Truk Berangkat / Tiba di Bojonegoro';
-            else if(totalBeratBeli === 0) trukStatus = 'Menunggu Target 20 Ton';
-            document.getElementById('ops-status-truk').innerText = trukStatus;
+            // Status Loading & Perjalanan Logistik Berdasarkan Berat (Target 20 Ton / 20.000 Kg)
+            let statusLoading = 'Belum Mulai';
+            let activeStep = 0; // 0: Belum, 1: Praya, 2: Pel. Lombok, 3: Pel. Perak, 4: Lamongan, 5: Babat, 6: Bojonegoro
+
+            if(totalBeratBeli > 0 && totalBeratBeli < 20000) {
+                statusLoading = 'Sedang Loading (Pengumpulan)';
+                activeStep = 1; // Di Praya Tengah
+            } else if(totalBeratBeli >= 20000) {
+                statusLoading = 'Selesai Loading (Muatan Penuh)';
+                activeStep = 2; // Menuju Pelabuhan Lombok
+                
+                // Jika sudah ada data penjualan, anggap sudah sampai tujuan akhir
+                if(totalBeratJual > 0) {
+                    activeStep = 6;
+                }
+            }
+
+            document.getElementById('ops-status-loading').innerText = statusLoading;
+
+            // Render 6 Titik Progress Perjalanan Rute
+            const routePoints = [
+                { id: 1, name: 'Praya Tengah' },
+                { id: 2, name: 'Pelabuhan Lombok' },
+                { id: 3, name: 'Pelabuhan Perak' },
+                { id: 4, name: 'Lamongan' },
+                { id: 5, name: 'Babat' },
+                { id: 6, name: 'Bojonegoro' }
+            ];
+
+            routePoints.forEach(pt => {
+                let stepEl = document.getElementById(`step-${pt.id}`);
+                let badgeEl = document.getElementById(`badge-${pt.id}`);
+                if(pt.id < activeStep) {
+                    // Selesai / Terlewati
+                    stepEl.className = 'p-3 rounded-lg border border-emerald-300 bg-emerald-50 text-center transition';
+                    badgeEl.className = 'mt-2 text-[10px] px-2 py-0.5 rounded font-bold bg-emerald-600 text-white';
+                    badgeEl.innerText = 'Selesai';
+                } else if(pt.id === activeStep) {
+                    // Sedang Berlangsung / Aktif
+                    stepEl.className = 'p-3 rounded-lg border border-amber-400 bg-amber-50 text-center shadow-sm transition';
+                    badgeEl.className = 'mt-2 text-[10px] px-2 py-0.5 rounded font-bold bg-amber-600 text-white animate-pulse';
+                    badgeEl.innerText = 'Posisi Truk';
+                } else {
+                    // Belum
+                    stepEl.className = 'p-3 rounded-lg border border-slate-200 bg-slate-50 text-center transition';
+                    badgeEl.className = 'mt-2 text-[10px] px-2 py-0.5 rounded font-bold bg-slate-200 text-slate-600';
+                    badgeEl.innerText = 'Menunggu';
+                }
+            });
 
             let targetKg = 20000;
             let percent = Math.min(100, (totalBeratBeli / targetKg) * 100);
@@ -546,10 +631,10 @@
 
             let statusText = document.getElementById('target-status-text');
             if(totalBeratBeli >= targetKg) {
-                statusText.innerText = 'Target 20 Ton Tercapai - Siap Kirim Fuso';
+                statusText.innerText = 'Target 20 Ton Tercapai - Truk Siap / Sedang Berjalan';
                 statusText.className = 'text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full';
             } else {
-                statusText.innerText = `Pengumpulan Lombok (${percent.toFixed(1)}% dari 20 Ton)`;
+                statusText.innerText = `Loading Gudang Lombok (${percent.toFixed(1)}% dari 20 Ton)`;
                 statusText.className = 'text-xs font-semibold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full';
             }
         }
