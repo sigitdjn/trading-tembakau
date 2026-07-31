@@ -192,6 +192,7 @@
                         <button onclick="switchInputForm('jual')" id="btn-form-jual" class="py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Penjualan Bojonegoro</button>
                     </div>
 
+                    <!-- Form Pembelian -->
                     <form id="form-beli" onsubmit="handleInputWA(event, 'beli')" class="space-y-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Nama Petani / Supplier</label>
@@ -222,6 +223,7 @@
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Database</button>
                     </form>
 
+                    <!-- Form Biaya -->
                     <form id="form-biaya" onsubmit="handleInputWA(event, 'biaya')" class="space-y-4 hidden">
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Kategori Biaya</label>
@@ -250,6 +252,7 @@
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Database</button>
                     </form>
 
+                    <!-- Form Penjualan -->
                     <form id="form-jual" onsubmit="handleInputWA(event, 'jual')" class="space-y-4 hidden">
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Nama Pembeli (Buyer di Bojonegoro)</label>
@@ -730,7 +733,6 @@
             });
         }
 
-        // Helper untuk konversi file gambar ke Base64 string
         function convertFileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -749,7 +751,6 @@
             let fileInput = document.getElementById(`${type}-foto`);
             let fotoUrl = '';
 
-            // Jika ada foto yang dipilih, ubah langsung ke base64 (Gratis & Tanpa Storage)
             if(fileInput && fileInput.files && fileInput.files[0]) {
                 try {
                     fotoUrl = await convertFileToBase64(fileInput.files[0]);
