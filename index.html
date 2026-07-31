@@ -79,17 +79,12 @@
                     </div>
                 </div>
 
-                <!-- ROW 2: KOTAK TOTAL PEMBELIAN, STATUS LOADING & TOTAL TEMBAKAU TERJUAL -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <!-- ROW 2: KOTAK TOTAL PEMBELIAN & TOTAL TEMBAKAU TERJUAL (2 Kolom) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                         <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Pembelian Tembakau</div>
                         <div id="ops-berat-beli" class="text-2xl font-bold text-slate-900 mt-1">0 Kg</div>
                         <div class="text-xs text-slate-400 mt-2">Gudang Transit Lombok</div>
-                    </div>
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Status Loading Gudang</div>
-                        <div id="ops-status-loading" class="text-lg font-bold text-amber-700 mt-1">Menunggu Data</div>
-                        <div class="text-xs text-slate-400 mt-2">Pengumpulan & Pemuatan Fuso</div>
                     </div>
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                         <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Tembakau Terjual</div>
@@ -628,20 +623,15 @@
             document.getElementById('ops-berat-beli').innerText = totalBeratBeli + ' Kg';
             document.getElementById('ops-berat-jual').innerText = totalBeratJual + ' Kg';
 
-            let statusLoading = 'Belum Mulai';
             let activeRouteStep = 0;
-
             if(totalBeratBeli > 0 && totalBeratBeli < 20000) {
-                statusLoading = 'Sedang Loading (Pengumpulan)';
                 activeRouteStep = 1; // Praya Tengah
             } else if(totalBeratBeli >= 20000) {
-                statusLoading = 'Selesai Loading (Muatan Penuh)';
                 activeRouteStep = 2; // Pelabuhan Lombok / Berangkat
                 if(totalBeratJual > 0) {
                     activeRouteStep = 6; // Bojonegoro (Selesai)
                 }
             }
-            document.getElementById('ops-status-loading').innerText = statusLoading;
 
             // 1. Render Timeline Status Utama (7 Tahap)
             let steps = ['pembelian', 'loading', 'berangkat', 'perjalanan', 'tiba', 'bongkar', 'penjualan'];
