@@ -33,7 +33,7 @@
                     <button onclick="switchTab('ops')" id="btn-ops" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-800 text-white transition cursor-pointer">Dashboard Operasional</button>
                     <button onclick="switchTab('finance')" id="btn-finance" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Dashboard Keuangan</button>
                     
-                    <!-- Menu khusus Admin (Tersembunyi untuk Viewer/Investor) -->
+                    <!-- Menu khusus Admin (Tersembunyi untuk Viewer/Investor secara mutlak) -->
                     <button onclick="switchTab('approval')" id="btn-approval" class="admin-only hidden px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition relative cursor-pointer">
                         Review WA 
                         <span id="badge-pending" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
@@ -371,7 +371,9 @@
                     authBtn.className = 'px-3 py-2 text-xs font-bold rounded-lg bg-red-700 text-red-100 hover:bg-red-600 transition cursor-pointer ml-2';
                 }
             } else {
-                adminElements.forEach(el => el.classList.add('hidden'));
+                adminElements.forEach(el => {
+                    el.classList.add('hidden');
+                });
                 if(statusLabel) statusLabel.innerText = "Mode Investor / Viewer";
                 if(authBtn) {
                     authBtn.innerHTML = '<i class="fa-solid fa-lock mr-1"></i> Login Admin';
@@ -916,10 +918,14 @@
                 let el = document.getElementById(`tab-${t}`);
                 let btn = document.getElementById(`btn-${t}`);
                 if(el) el.classList.add('hidden');
-                if(btn && !btn.classList.contains('admin-only')) {
-                    btn.className = 'px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer';
-                } else if(btn) {
-                    btn.className = 'admin-only px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer';
+                if(btn) {
+                    if(btn.classList.contains('admin-only')) {
+                        if(!isAdminLoggedIn) {
+                            btn.classList.add('hidden');
+                        }
+                    } else {
+                        btn.className = 'px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer';
+                    }
                 }
             });
             let targetTab = document.getElementById(`tab-${tab}`);
