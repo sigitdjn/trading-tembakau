@@ -53,15 +53,31 @@
             
             <!-- DASHBOARD 1: OPERASIONAL & LOGISTIK -->
             <div id="tab-ops" class="space-y-6">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div class="flex items-center space-x-3 w-full sm:w-auto">
-                        <label class="font-bold text-sm text-slate-700 whitespace-nowrap"><i class="fa-solid fa-layer-group text-amber-800 mr-1"></i> Pilih Periode Lot:</label>
-                        <select id="lot-selector" onchange="changeActiveLot(this.value)" class="p-2 border border-slate-300 rounded-lg text-sm font-bold bg-amber-50 text-amber-900 outline-none w-full sm:w-48 cursor-pointer">
-                        </select>
+                
+                <!-- KOTAK BATCH AKTIF & FILTER LOT -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Kotak Judul BATCH AKTIF -->
+                    <div style="background: linear-gradient(135deg, #78350f, #b45309);" class="p-5 rounded-xl shadow-sm text-white flex items-center justify-between">
+                        <div>
+                            <div class="text-xs uppercase tracking-wider text-amber-200 font-semibold"><i class="fa-solid fa-fire mr-1"></i> BATCH AKTIF</div>
+                            <div id="batch-active-display" class="text-3xl font-extrabold mt-1">Lot 1</div>
+                        </div>
+                        <div class="bg-white/20 p-3 rounded-lg">
+                            <i class="fa-solid fa-boxes-stacked text-3xl text-amber-200"></i>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                        <span id="lot-status-badge" class="px-3 py-1 text-xs font-bold rounded-full bg-amber-100 text-amber-800">Status: Memuat Cloud...</span>
-                        <button onclick="toggleCloseLot()" id="btn-toggle-lot" class="admin-only hidden px-3 py-1 text-xs font-bold bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition cursor-pointer">Tandai Lot Selesai</button>
+
+                    <!-- Panel Pemilih Lot & Status -->
+                    <div class="md:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center space-x-3 w-full sm:w-auto">
+                            <label class="font-bold text-sm text-slate-700 whitespace-nowrap"><i class="fa-solid fa-layer-group text-amber-800 mr-1"></i> Pilih Lot:</label>
+                            <select id="lot-selector" onchange="changeActiveLot(this.value)" class="p-2 border border-slate-300 rounded-lg text-sm font-bold bg-amber-50 text-amber-900 outline-none w-full sm:w-48 cursor-pointer">
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                            <span id="lot-status-badge" class="px-3 py-1 text-xs font-bold rounded-full bg-amber-100 text-amber-800">Status: Memuat Cloud...</span>
+                            <button onclick="toggleCloseLot()" id="btn-toggle-lot" class="admin-only hidden px-3 py-1 text-xs font-bold bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition cursor-pointer">Tandai Lot Selesai</button>
+                        </div>
                     </div>
                 </div>
 
@@ -337,7 +353,7 @@
         let dateFilterEnd = '';
         let isAdminLoggedIn = false;
         
-        // PIN Admin diubah menjadi 1966
+        // PIN Admin
         const ADMIN_PIN = "1966"; 
 
         window.toggleAdminAuth = function() {
@@ -428,6 +444,9 @@
         window.initLotDropdowns = function() {
             const selector = document.getElementById('lot-selector');
             const inputSelector = document.getElementById('input-lot-id');
+            const batchDisplay = document.getElementById('batch-active-display');
+            
+            if(batchDisplay) batchDisplay.innerText = activeLot;
             if(!selector || !inputSelector) return;
 
             selector.innerHTML = '';
