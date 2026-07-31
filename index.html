@@ -26,17 +26,23 @@
                     </div>
                     <div>
                         <h1 class="text-xl font-bold">Trading Tembakau Lombok - Bojonegoro</h1>
-                        <p class="text-xs text-amber-200">Cloud Database (100% Free Mode)</p>
+                        <p class="text-xs text-amber-200">Cloud Database (<span id="role-status-label">Mode Investor / Viewer</span>)</p>
                     </div>
                 </div>
-                <div class="mt-3 sm:mt-0 flex flex-wrap gap-2">
+                <div class="mt-3 sm:mt-0 flex flex-wrap items-center gap-2">
                     <button onclick="switchTab('ops')" id="btn-ops" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-800 text-white transition cursor-pointer">Dashboard Operasional</button>
                     <button onclick="switchTab('finance')" id="btn-finance" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Dashboard Keuangan</button>
-                    <button onclick="switchTab('approval')" id="btn-approval" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition relative cursor-pointer">
+                    <!-- Menu Admin Only -->
+                    <button onclick="switchTab('approval')" id="btn-approval" class="admin-only hidden px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition relative cursor-pointer">
                         Review WA 
                         <span id="badge-pending" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
                     </button>
-                    <button onclick="switchTab('input')" id="btn-input" class="px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Simulasi Kirim WA</button>
+                    <button onclick="switchTab('input')" id="btn-input" class="admin-only hidden px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer">Simulasi Kirim WA</button>
+                    
+                    <!-- Tombol Login/Logout Admin -->
+                    <button id="btn-auth-toggle" onclick="toggleAdminAuth()" class="px-3 py-2 text-xs font-bold rounded-lg bg-amber-700 text-amber-100 hover:bg-amber-600 transition cursor-pointer ml-2">
+                        <i class="fa-solid fa-lock mr-1"></i> Login Admin
+                    </button>
                 </div>
             </div>
         </header>
@@ -54,7 +60,7 @@
                     </div>
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                         <span id="lot-status-badge" class="px-3 py-1 text-xs font-bold rounded-full bg-amber-100 text-amber-800">Status: Memuat Cloud...</span>
-                        <button onclick="toggleCloseLot()" id="btn-toggle-lot" class="px-3 py-1 text-xs font-bold bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition cursor-pointer">Tandai Lot Selesai</button>
+                        <button onclick="toggleCloseLot()" id="btn-toggle-lot" class="admin-only hidden px-3 py-1 text-xs font-bold bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition cursor-pointer">Tandai Lot Selesai</button>
                     </div>
                 </div>
 
@@ -156,8 +162,8 @@
                 </div>
             </div>
 
-            <!-- TAB REVIEW WA -->
-            <div id="tab-approval" class="hidden space-y-6 max-w-4xl mx-auto">
+            <!-- TAB REVIEW WA (ADMIN ONLY) -->
+            <div id="tab-approval" class="hidden admin-only space-y-6 max-w-4xl mx-auto">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <div class="flex justify-between items-center mb-4">
                         <div>
@@ -170,8 +176,8 @@
                 </div>
             </div>
 
-            <!-- TAB SIMULASI KIRIM WA -->
-            <div id="tab-input" class="hidden max-w-2xl mx-auto space-y-6">
+            <!-- TAB SIMULASI KIRIM WA (ADMIN ONLY) -->
+            <div id="tab-input" class="hidden admin-only max-w-2xl mx-auto space-y-6">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h3 class="font-bold text-lg text-slate-800 mb-2">Simulasi Pengiriman Pesan WhatsApp & Nota</h3>
                     <p class="text-xs text-slate-500 mb-4">Mewakili agen lapangan mengirim laporan beserta foto bukti nota ke database cloud.</p>
@@ -328,6 +334,48 @@
         let cloudPendingQueue = [];
         let dateFilterStart = '';
         let dateFilterEnd = '';
+        let isAdminLoggedIn = false;
+        const ADMIN_PIN = "123"; // Ganti PIN rahasia Anda di sini
+
+        window.toggleAdminAuth = function() {
+            if(isAdminLoggedIn) {
+                isAdminLoggedIn = false;
+                applyAdminUIMode();
+                alert("Anda telah keluar dari Mode Admin.");
+                switchTab('ops');
+            } else {
+                let pin = prompt("Masukkan PIN Admin:");
+                if(pin === ADMIN_PIN) {
+                    isAdminLoggedIn = true;
+                    applyAdminUIMode();
+                    alert("Berhasil Login sebagai Admin!");
+                } else if(pin !== null) {
+                    alert("PIN Salah!");
+                }
+            }
+        }
+
+        function applyAdminUIMode() {
+            const adminElements = document.querySelectorAll('.admin-only');
+            const statusLabel = document.getElementById('role-status-label');
+            const authBtn = document.getElementById('btn-auth-toggle');
+
+            if(isAdminLoggedIn) {
+                adminElements.forEach(el => el.classList.remove('hidden'));
+                if(statusLabel) statusLabel.innerText = "Mode Admin Penuh";
+                if(authBtn) {
+                    authBtn.innerHTML = '<i class="fa-solid fa-lock-open mr-1"></i> Logout Admin';
+                    authBtn.className = 'px-3 py-2 text-xs font-bold rounded-lg bg-red-700 text-red-100 hover:bg-red-600 transition cursor-pointer ml-2';
+                }
+            } else {
+                adminElements.forEach(el => el.classList.add('hidden'));
+                if(statusLabel) statusLabel.innerText = "Mode Investor / Viewer";
+                if(authBtn) {
+                    authBtn.innerHTML = '<i class="fa-solid fa-lock mr-1"></i> Login Admin';
+                    authBtn.className = 'px-3 py-2 text-xs font-bold rounded-lg bg-amber-700 text-amber-100 hover:bg-amber-600 transition cursor-pointer ml-2';
+                }
+            }
+        }
 
         async function initCloudDatabase() {
             try {
@@ -744,6 +792,10 @@
 
         window.handleInputWA = async function(e, type) {
             e.preventDefault();
+            if(!isAdminLoggedIn) {
+                alert("Akses ditolak! Hanya Admin yang dapat mengirim laporan.");
+                return;
+            }
             const sender = document.getElementById('input-sender').value;
             const lot = document.getElementById('input-lot-id').value;
             let data = {};
@@ -799,6 +851,7 @@
         }
 
         window.approveCloudItem = async function(firestoreId, index) {
+            if(!isAdminLoggedIn) return;
             let item = cloudPendingQueue[index];
             if(!item) return;
 
@@ -819,6 +872,7 @@
         }
 
         window.rejectCloudItem = async function(firestoreId) {
+            if(!isAdminLoggedIn) return;
             if(confirm('Tolak laporan ini dari cloud?')) {
                 try {
                     await deleteDoc(doc(db, 'trading_tembakau_approval', firestoreId));
@@ -834,6 +888,10 @@
         }
 
         window.toggleCloseLot = async function() {
+            if(!isAdminLoggedIn) {
+                alert("Akses ditolak! Hanya Admin yang dapat mengubah status lot.");
+                return;
+            }
             let currentLotData = cloudLotsData[activeLot];
             if(!currentLotData) return;
 
@@ -847,16 +905,27 @@
         }
 
         window.switchTab = function(tab) {
+            if((tab === 'approval' || tab === 'input') && !isAdminLoggedIn) {
+                alert("Menu ini khusus untuk Admin. Silakan Login Admin terlebih dahulu.");
+                return;
+            }
             ['ops', 'finance', 'approval', 'input'].forEach(t => {
                 let el = document.getElementById(`tab-${t}`);
                 let btn = document.getElementById(`btn-${t}`);
                 if(el) el.classList.add('hidden');
-                if(btn) btn.className = 'px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer';
+                if(btn && !btn.classList.contains('admin-only')) {
+                    btn.className = 'px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer';
+                } else if(btn) {
+                    btn.className = 'admin-only px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-950 text-amber-200 transition cursor-pointer';
+                }
             });
             let targetTab = document.getElementById(`tab-${tab}`);
             let targetBtn = document.getElementById(`btn-${tab}`);
             if(targetTab) targetTab.classList.remove('hidden');
-            if(targetBtn) targetBtn.className = 'px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-800 text-white transition cursor-pointer';
+            if(targetBtn) {
+                let isAo = targetBtn.classList.contains('admin-only');
+                targetBtn.className = (isAo ? 'admin-only ' : '') + 'px-3 py-2 text-xs sm:text-sm font-medium rounded-lg bg-amber-800 text-white transition cursor-pointer';
+            }
         }
 
         window.switchInputForm = function(type) {
