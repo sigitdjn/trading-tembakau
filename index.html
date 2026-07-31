@@ -26,7 +26,7 @@
                     </div>
                     <div>
                         <h1 class="text-xl font-bold">Trading Tembakau Lombok - Bojonegoro</h1>
-                        <p class="text-xs text-amber-200">Cloud Database Real-Time Connected</p>
+                        <p class="text-xs text-amber-200">Cloud Database (100% Free Mode)</p>
                     </div>
                 </div>
                 <div class="mt-3 sm:mt-0 flex flex-wrap gap-2">
@@ -135,7 +135,7 @@
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="p-4 bg-slate-50 border-b border-slate-200 font-bold text-slate-800 flex justify-between items-center">
-                        <span>Rekapitulasi Arus Kas (Cash Flow Masuk & Keluar)</span>
+                        <span>Rekapitulasi Arus Kas & Bukti Nota</span>
                         <span class="text-xs text-slate-500 font-normal">Lot Aktif: <span id="fin-active-lot-label" class="font-bold">Lot 1</span></span>
                     </div>
                     <div class="overflow-x-auto">
@@ -145,6 +145,7 @@
                                     <th class="p-3">Tanggal</th>
                                     <th class="p-3">Jenis Arus</th>
                                     <th class="p-3">Keterangan Rinci</th>
+                                    <th class="p-3 text-center">Nota / Bukti</th>
                                     <th class="p-3 text-right">Masuk (Debit)</th>
                                     <th class="p-3 text-right">Keluar (Kredit)</th>
                                 </tr>
@@ -161,7 +162,7 @@
                     <div class="flex justify-between items-center mb-4">
                         <div>
                             <h3 class="font-bold text-lg text-slate-800">Kotak Masuk Review Pesan WhatsApp (Cloud)</h3>
-                            <p class="text-xs text-slate-500">Laporan lapangan masuk ke sini secara real-time. Periksa data sebelum klik Setujui.</p>
+                            <p class="text-xs text-slate-500">Laporan lapangan masuk ke sini beserta foto nota. Periksa sebelum disetujui.</p>
                         </div>
                         <span id="pending-count-badge" class="px-3 py-1 bg-amber-100 text-amber-800 font-bold rounded-full text-xs">0 Menunggu</span>
                     </div>
@@ -172,8 +173,8 @@
             <!-- TAB SIMULASI KIRIM WA -->
             <div id="tab-input" class="hidden max-w-2xl mx-auto space-y-6">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h3 class="font-bold text-lg text-slate-800 mb-2">Simulasi Pengiriman Pesan WhatsApp Operator</h3>
-                    <p class="text-xs text-slate-500 mb-4">Mewakili agen di Lombok atau tim Bojonegoro yang mengirim laporan ke database cloud.</p>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Simulasi Pengiriman Pesan WhatsApp & Nota</h3>
+                    <p class="text-xs text-slate-500 mb-4">Mewakili agen lapangan mengirim laporan beserta foto bukti nota ke database cloud.</p>
 
                     <div class="mb-4">
                         <label class="block text-xs font-medium text-slate-700 mb-1">Pengirim Lapangan</label>
@@ -214,6 +215,10 @@
                             <label class="block text-xs font-medium text-slate-700 mb-1">Tanggal Transaksi (DD/MM/YYYY)</label>
                             <input type="text" id="beli-tanggal" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="12/08/2026">
                         </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Foto Bukti Nota / Kwitansi</label>
+                            <input type="file" id="beli-foto" accept="image/*" class="w-full p-1.5 text-xs border border-slate-300 rounded-lg bg-slate-50 cursor-pointer">
+                        </div>
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Database</button>
                     </form>
 
@@ -237,6 +242,10 @@
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Tanggal Transaksi (DD/MM/YYYY)</label>
                             <input type="text" id="biaya-tanggal" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="18/08/2026">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Foto Bukti Nota / Kwitansi</label>
+                            <input type="file" id="biaya-foto" accept="image/*" class="w-full p-1.5 text-xs border border-slate-300 rounded-lg bg-slate-50 cursor-pointer">
                         </div>
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Database</button>
                     </form>
@@ -264,6 +273,10 @@
                             <label class="block text-xs font-medium text-slate-700 mb-1">Tanggal Transaksi (DD/MM/YYYY)</label>
                             <input type="text" id="jual-tanggal" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="25/08/2026">
                         </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Foto Bukti Nota / Kwitansi</label>
+                            <input type="file" id="jual-foto" accept="image/*" class="w-full p-1.5 text-xs border border-slate-300 rounded-lg bg-slate-50 cursor-pointer">
+                        </div>
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Database</button>
                     </form>
                 </div>
@@ -271,8 +284,21 @@
         </main>
 
         <footer class="text-center py-4 text-xs text-slate-400 border-t border-slate-200 mt-auto">
-            Sistem Cloud Trading Tembakau &copy; 2026 - Powered by Firebase Firestore
+            Sistem Cloud Trading Tembakau &copy; 2026 - Powered by Firebase Firestore (Free)
         </footer>
+    </div>
+
+    <!-- Modal Preview Gambar Nota -->
+    <div id="modal-nota" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-lg w-full p-4 relative space-y-3">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-receipt mr-1 text-amber-800"></i> Bukti Nota / Kwitansi</h3>
+                <button onclick="closeNotaModal()" class="text-slate-500 hover:text-red-600 font-bold px-2 py-1 cursor-pointer">✕ Tutup</button>
+            </div>
+            <div class="text-center flex justify-center bg-slate-100 p-2 rounded-lg max-h-[70vh] overflow-auto">
+                <img id="modal-nota-img" src="" alt="Foto Nota" class="max-h-[60vh] object-contain rounded">
+            </div>
+        </div>
     </div>
 
     <!-- Firebase SDK & Cloud Realtime Logic -->
@@ -310,8 +336,8 @@
                     if(!snap.exists()) {
                         await setDoc(lotRef, {
                             status: i === 1 ? 'Aktif (Pengumpulan)' : 'Belum Dimulai',
-                            beli: i === 1 ? [{ tanggal: '12/08/2026', supplier: 'Pak Tani Praya', grade: 'Grade A', berat: 5000, harga: 45000 }] : [],
-                            biaya: i === 1 ? [{ tanggal: '18/08/2026', kategori: 'Biaya di Lombok', ket: 'Gudang transit', nominal: 1500000 }] : [],
+                            beli: i === 1 ? [{ tanggal: '12/08/2026', supplier: 'Pak Tani Praya', grade: 'Grade A', berat: 5000, harga: 45000, fotoUrl: '' }] : [],
+                            biaya: i === 1 ? [{ tanggal: '18/08/2026', kategori: 'Biaya di Lombok', ket: 'Gudang transit', nominal: 1500000, fotoUrl: '' }] : [],
                             jual: []
                         });
                     }
@@ -366,17 +392,14 @@
             return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
-        // Konversi format tanggal DD/MM/YYYY ke timestamp untuk pembanding filter
         function parseLocalDate(dateStr) {
             if(!dateStr) return 0;
-            // Jika format DD/MM/YYYY
             if(dateStr.includes('/')) {
                 let parts = dateStr.split('/');
                 if(parts.length === 3) {
                     return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`).getTime();
                 }
             }
-            // Jika format YYYY-MM-DD
             let d = new Date(dateStr);
             return isNaN(d.getTime()) ? 0 : d.getTime();
         }
@@ -487,11 +510,13 @@
 
             filteredBeli.forEach(item => {
                 let sub = item.berat * item.harga;
+                let notaBtn = item.fotoUrl ? `<button onclick="showNotaModal('${item.fotoUrl}')" class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded text-xs font-bold hover:bg-amber-200 cursor-pointer"><i class="fa-solid fa-image"></i> Lihat Nota</button>` : `<span class="text-slate-400 text-xs">Tanpa Nota</span>`;
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50">
                         <td class="p-3">${item.tanggal}</td>
                         <td class="p-3"><span class="px-2 py-0.5 bg-red-100 text-red-800 rounded text-xs font-semibold">Keluar (Beli)</span></td>
                         <td class="p-3">Pembelian tembakau dari ${item.supplier} (${item.berat} Kg)</td>
+                        <td class="p-3 text-center">${notaBtn}</td>
                         <td class="p-3 text-right">-</td>
                         <td class="p-3 text-right font-bold text-red-600">${formatRupiah(sub)}</td>
                     </tr>
@@ -499,11 +524,13 @@
             });
 
             filteredBiaya.forEach(item => {
+                let notaBtn = item.fotoUrl ? `<button onclick="showNotaModal('${item.fotoUrl}')" class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded text-xs font-bold hover:bg-amber-200 cursor-pointer"><i class="fa-solid fa-image"></i> Lihat Nota</button>` : `<span class="text-slate-400 text-xs">Tanpa Nota</span>`;
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50">
                         <td class="p-3">${item.tanggal}</td>
                         <td class="p-3"><span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-xs font-semibold">Keluar (${item.kategori})</span></td>
                         <td class="p-3">${item.ket}</td>
+                        <td class="p-3 text-center">${notaBtn}</td>
                         <td class="p-3 text-right">-</td>
                         <td class="p-3 text-right font-bold text-amber-700">${formatRupiah(item.nominal)}</td>
                     </tr>
@@ -512,11 +539,13 @@
 
             filteredJual.forEach(item => {
                 let sub = item.berat * item.harga;
+                let notaBtn = item.fotoUrl ? `<button onclick="showNotaModal('${item.fotoUrl}')" class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded text-xs font-bold hover:bg-amber-200 cursor-pointer"><i class="fa-solid fa-image"></i> Lihat Nota</button>` : `<span class="text-slate-400 text-xs">Tanpa Nota</span>`;
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50">
                         <td class="p-3">${item.tanggal}</td>
                         <td class="p-3"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-xs font-semibold">Masuk (Omzet)</span></td>
                         <td class="p-3">Penjualan ke ${item.pembeli} (${item.berat} Kg)</td>
+                        <td class="p-3 text-center">${notaBtn}</td>
                         <td class="p-3 text-right font-bold text-emerald-600">${formatRupiah(sub)}</td>
                         <td class="p-3 text-right">-</td>
                     </tr>
@@ -524,8 +553,17 @@
             });
 
             if(tbody.innerHTML === '') {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada transaksi keuangan pada periode/lot ini.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada transaksi keuangan pada periode/lot ini.</td></tr>`;
             }
+        }
+
+        window.showNotaModal = function(url) {
+            document.getElementById('modal-nota-img').src = url;
+            document.getElementById('modal-nota').classList.remove('hidden');
+        }
+
+        window.closeNotaModal = function() {
+            document.getElementById('modal-nota').classList.add('hidden');
         }
 
         window.generatePDFReport = function() {
@@ -589,6 +627,7 @@
                                 <th>Tanggal</th>
                                 <th>Jenis Transaksi</th>
                                 <th>Keterangan Rinci</th>
+                                <th>Status Nota</th>
                                 <th class="text-right">Masuk (Debit)</th>
                                 <th class="text-right">Keluar (Kredit)</th>
                             </tr>
@@ -597,11 +636,13 @@
             `);
 
             filteredBeli.forEach(item => {
+                let statusNota = item.fotoUrl ? 'Ada Lampiran Nota' : 'Tanpa Nota';
                 printWindow.document.write(`
                     <tr>
                         <td>${item.tanggal}</td>
                         <td>Belanja (Beli)</td>
                         <td>Pembelian tembakau dari ${item.supplier} (${item.berat} Kg)</td>
+                        <td>${statusNota}</td>
                         <td class="text-right">-</td>
                         <td class="text-right">${formatRupiah(item.berat * item.harga)}</td>
                     </tr>
@@ -609,11 +650,13 @@
             });
 
             filteredBiaya.forEach(item => {
+                let statusNota = item.fotoUrl ? 'Ada Lampiran Nota' : 'Tanpa Nota';
                 printWindow.document.write(`
                     <tr>
                         <td>${item.tanggal}</td>
                         <td>${item.kategori}</td>
                         <td>${item.ket}</td>
+                        <td>${statusNota}</td>
                         <td class="text-right">-</td>
                         <td class="text-right">${formatRupiah(item.nominal)}</td>
                     </tr>
@@ -621,11 +664,13 @@
             });
 
             filteredJual.forEach(item => {
+                let statusNota = item.fotoUrl ? 'Ada Lampiran Nota' : 'Tanpa Nota';
                 printWindow.document.write(`
                     <tr>
                         <td>${item.tanggal}</td>
                         <td>Omzet (Jual)</td>
                         <td>Penjualan ke ${item.pembeli} (${item.berat} Kg)</td>
+                        <td>${statusNota}</td>
                         <td class="text-right">${formatRupiah(item.berat * item.harga)}</td>
                         <td class="text-right">-</td>
                     </tr>
@@ -667,11 +712,14 @@
                 else if(item.type === 'biaya') detailText = `<strong>Biaya (${item.lot}):</strong> [${item.data.kategori}] ${item.data.ket} — ${formatRupiah(item.data.nominal)} (${item.data.tanggal})`;
                 else detailText = `<strong>Jual (${item.lot}):</strong> Buyer: ${item.data.pembeli} — ${item.data.berat} Kg @ ${formatRupiah(item.data.harga)} (${item.data.tanggal})`;
 
+                let notaPreview = item.data.fotoUrl ? `<div class="mt-2"><button onclick="showNotaModal('${item.data.fotoUrl}')" class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded text-xs font-bold hover:bg-amber-200 cursor-pointer"><i class="fa-solid fa-image"></i> Lihat Foto Nota</button></div>` : '';
+
                 container.innerHTML += `
                     <div class="p-4 border border-slate-200 rounded-xl bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div class="space-y-1">
                             <div class="text-xs text-amber-800 font-bold"><i class="fa-brands fa-whatsapp mr-1"></i> Dari: ${item.sender}</div>
                             <div class="text-sm text-slate-800">${detailText}</div>
+                            ${notaPreview}
                         </div>
                         <div class="flex items-center gap-2">
                             <button onclick="approveCloudItem('${item.firestoreId}', ${index})" class="px-3 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-xs hover:bg-emerald-700 cursor-pointer">Setujui & Post</button>
@@ -682,23 +730,65 @@
             });
         }
 
+        // Helper untuk konversi file gambar ke Base64 string
+        function convertFileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
         window.handleInputWA = async function(e, type) {
             e.preventDefault();
             const sender = document.getElementById('input-sender').value;
             const lot = document.getElementById('input-lot-id').value;
             let data = {};
 
+            let fileInput = document.getElementById(`${type}-foto`);
+            let fotoUrl = '';
+
+            // Jika ada foto yang dipilih, ubah langsung ke base64 (Gratis & Tanpa Storage)
+            if(fileInput && fileInput.files && fileInput.files[0]) {
+                try {
+                    fotoUrl = await convertFileToBase64(fileInput.files[0]);
+                } catch(err) {
+                    console.error("Gagal membaca foto nota:", err);
+                }
+            }
+
             if(type === 'beli') {
-                data = { tanggal: document.getElementById('beli-tanggal').value, supplier: document.getElementById('beli-supplier').value, grade: document.getElementById('beli-grade').value, berat: Number(document.getElementById('beli-berat').value), harga: Number(document.getElementById('beli-harga').value) };
+                data = { 
+                    tanggal: document.getElementById('beli-tanggal').value, 
+                    supplier: document.getElementById('beli-supplier').value, 
+                    grade: document.getElementById('beli-grade').value, 
+                    berat: Number(document.getElementById('beli-berat').value), 
+                    harga: Number(document.getElementById('beli-harga').value),
+                    fotoUrl: fotoUrl
+                };
             } else if(type === 'biaya') {
-                data = { tanggal: document.getElementById('biaya-tanggal').value, kategori: document.getElementById('biaya-kategori').value, ket: document.getElementById('biaya-ket').value, nominal: Number(document.getElementById('biaya-nominal').value) };
+                data = { 
+                    tanggal: document.getElementById('biaya-tanggal').value, 
+                    kategori: document.getElementById('biaya-kategori').value, 
+                    ket: document.getElementById('biaya-ket').value, 
+                    nominal: Number(document.getElementById('biaya-nominal').value),
+                    fotoUrl: fotoUrl
+                };
             } else if(type === 'jual') {
-                data = { tanggal: document.getElementById('jual-tanggal').value, pembeli: document.getElementById('jual-pembeli').value, grade: document.getElementById('jual-grade').value, berat: Number(document.getElementById('jual-berat').value), harga: Number(document.getElementById('jual-harga').value) };
+                data = { 
+                    tanggal: document.getElementById('jual-tanggal').value, 
+                    pembeli: document.getElementById('jual-pembeli').value, 
+                    grade: document.getElementById('jual-grade').value, 
+                    berat: Number(document.getElementById('jual-berat').value), 
+                    harga: Number(document.getElementById('jual-harga').value),
+                    fotoUrl: fotoUrl
+                };
             }
 
             try {
                 await addDoc(collection(db, 'trading_tembakau_approval'), { sender, lot, type, data, timestamp: Date.now() });
-                alert('Laporan berhasil dikirim ke Cloud Database!');
+                alert('Laporan & Foto Nota berhasil dikirim ke Cloud Database!');
                 e.target.reset();
                 switchTab('approval');
             } catch(err) {
