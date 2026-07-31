@@ -79,7 +79,7 @@
                     </div>
                 </div>
 
-                <!-- ROW 2: KOTAK TOTAL PEMBELIAN & TOTAL TEMBAKAU TERJUAL (2 Kolom) -->
+                <!-- ROW 2: KOTAK TOTAL PEMBELIAN & TOTAL TEMBAKAU TERJUAL -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                         <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Pembelian Tembakau</div>
@@ -274,7 +274,7 @@
                     <div class="flex justify-between items-center mb-4">
                         <div>
                             <h3 class="font-bold text-lg text-slate-800">Kotak Masuk Review Pesan WhatsApp (Cloud)</h3>
-                            <p class="text-xs text-slate-500">Laporan lapangan masuk ke sini beserta foto nota. Periksa sebelum disetujui.</p>
+                            <p class="text-xs text-slate-500">Laporan lapangan masuk ke sini beserta foto nota/posisi. Periksa sebelum disetujui.</p>
                         </div>
                         <span id="pending-count-badge" class="px-3 py-1 bg-amber-100 text-amber-800 font-bold rounded-full text-xs">0 Menunggu</span>
                     </div>
@@ -286,11 +286,11 @@
             <div id="tab-input" class="hidden admin-only max-w-2xl mx-auto space-y-6">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h3 class="font-bold text-lg text-slate-800 mb-2">Simulasi Pengiriman Pesan WhatsApp & Nota</h3>
-                    <p class="text-xs text-slate-500 mb-4">Mewakili agen lapangan mengirim laporan beserta foto bukti nota ke database cloud.</p>
+                    <p class="text-xs text-slate-500 mb-4">Mewakili agen / supir lapangan mengirim laporan atau update posisi fuso ke database cloud.</p>
 
                     <div class="mb-4">
-                        <label class="block text-xs font-medium text-slate-700 mb-1">Pengirim Lapangan</label>
-                        <input type="text" id="input-sender" class="w-full p-2 text-sm border border-slate-300 rounded-lg bg-slate-50" value="Budi (Agen Lombok)">
+                        <label class="block text-xs font-medium text-slate-700 mb-1">Pengirim Lapangan / Supir Fuso</label>
+                        <input type="text" id="input-sender" class="w-full p-2 text-sm border border-slate-300 rounded-lg bg-slate-50" value="Supir Fuso / Budi">
                     </div>
 
                     <div class="mb-4">
@@ -298,10 +298,11 @@
                         <select id="input-lot-id" class="w-full p-2.5 text-sm border border-slate-300 rounded-lg font-bold bg-amber-50 text-amber-900 cursor-pointer"></select>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-2 mb-4">
-                        <button onclick="switchInputForm('beli')" id="btn-form-beli" class="py-2 text-xs font-bold rounded-lg bg-amber-900 text-white cursor-pointer">Pembelian Lombok</button>
-                        <button onclick="switchInputForm('biaya')" id="btn-form-biaya" class="py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Biaya Logistik</button>
-                        <button onclick="switchInputForm('jual')" id="btn-form-jual" class="py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Penjualan Bojonegoro</button>
+                    <div class="grid grid-cols-4 gap-1.5 mb-4">
+                        <button onclick="switchInputForm('beli')" id="btn-form-beli" class="py-2 text-[11px] font-bold rounded-lg bg-amber-900 text-white cursor-pointer">Pembelian</button>
+                        <button onclick="switchInputForm('posisi')" id="btn-form-posisi" class="py-2 text-[11px] font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Update Posisi</button>
+                        <button onclick="switchInputForm('biaya')" id="btn-form-biaya" class="py-2 text-[11px] font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Biaya</button>
+                        <button onclick="switchInputForm('jual')" id="btn-form-jual" class="py-2 text-[11px] font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer">Penjualan</button>
                     </div>
 
                     <!-- Form Pembelian -->
@@ -333,6 +334,30 @@
                             <input type="file" id="beli-foto" accept="image/*" class="w-full p-1.5 text-xs border border-slate-300 rounded-lg bg-slate-50 cursor-pointer">
                         </div>
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Database</button>
+                    </form>
+
+                    <!-- Form Update Posisi Truk Fuso (BARU) -->
+                    <form id="form-posisi" onsubmit="handleInputWA(event, 'posisi')" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Pilih Posisi / Titik Rute Terkini</label>
+                            <select id="posisi-titik" class="w-full p-2 text-sm border border-slate-300 rounded-lg font-bold bg-amber-50 text-amber-900">
+                                <option value="1">Titik 1: Praya Tengah (Loading)</option>
+                                <option value="2">Titik 2: Pelabuhan Lombok (Berangkat)</option>
+                                <option value="3">Titik 3: Pelabuhan Perak (Surabaya)</option>
+                                <option value="4">Titik 4: Lamongan</option>
+                                <option value="5">Titik 5: Babat</option>
+                                <option value="6">Titik 6: Bojonegoro (Tiba / Bongkar)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Keterangan / Catatan Perjalanan</label>
+                            <input type="text" id="posisi-ket" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="Alhamdulillah truk sudah sampai di Babat dengan aman">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Tanggal & Waktu Info</label>
+                            <input type="text" id="posisi-tanggal" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="23/08/2026">
+                        </div>
+                        <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim Update Posisi ke Cloud</button>
                     </form>
 
                     <!-- Form Biaya -->
@@ -442,7 +467,6 @@
         let dateFilterEnd = '';
         let isAdminLoggedIn = false;
         
-        // PIN Admin
         const ADMIN_PIN = "1966"; 
 
         window.toggleAdminAuth = function() {
@@ -497,6 +521,7 @@
                     if(!snap.exists()) {
                         await setDoc(lotRef, {
                             status: i === 1 ? 'Aktif (Pengumpulan)' : 'Belum Dimulai',
+                            manualRouteStep: 0, // Menyimpan override posisi rute manual dari supir
                             beli: i === 1 ? [{ tanggal: '12/08/2026', supplier: 'Pak Tani Praya', grade: 'Grade A', berat: 5000, harga: 45000, fotoUrl: '' }] : [],
                             biaya: i === 1 ? [{ tanggal: '18/08/2026', kategori: 'Biaya di Lombok', ket: 'Gudang transit', nominal: 1500000, fotoUrl: '' }] : [],
                             jual: []
@@ -623,13 +648,16 @@
             document.getElementById('ops-berat-beli').innerText = totalBeratBeli + ' Kg';
             document.getElementById('ops-berat-jual').innerText = totalBeratJual + ' Kg';
 
-            let activeRouteStep = 0;
-            if(totalBeratBeli > 0 && totalBeratBeli < 20000) {
-                activeRouteStep = 1; // Praya Tengah
-            } else if(totalBeratBeli >= 20000) {
-                activeRouteStep = 2; // Pelabuhan Lombok / Berangkat
-                if(totalBeratJual > 0) {
-                    activeRouteStep = 6; // Bojonegoro (Selesai)
+            // Hitung posisi rute otomatis, atau gunakan manualRouteStep jika diset oleh supir via WA
+            let activeRouteStep = currentLotData.manualRouteStep || 0;
+            if(!currentLotData.manualRouteStep) {
+                if(totalBeratBeli > 0 && totalBeratBeli < 20000) {
+                    activeRouteStep = 1; // Praya Tengah
+                } else if(totalBeratBeli >= 20000) {
+                    activeRouteStep = 2; // Pelabuhan Lombok
+                    if(totalBeratJual > 0) {
+                        activeRouteStep = 6; // Bojonegoro
+                    }
                 }
             }
 
@@ -638,6 +666,8 @@
             let activeIdx = 0; 
             if(totalBeratBeli > 0) activeIdx = 1; 
             if(totalBeratBeli >= 20000) activeIdx = 2; 
+            if(activeRouteStep >= 3 && activeRouteStep < 6) activeIdx = 3; // Dalam Perjalanan
+            if(activeRouteStep === 6) { activeIdx = 6; }
             if(currentLotData.status.includes('Selesai') || totalBeratJual > 0) activeIdx = 6; 
 
             steps.forEach((stepName, idx) => {
@@ -664,7 +694,7 @@
                 }
             });
 
-            // 2. Render Timeline Rute Perjalanan Truk Fuso (6 Titik: Praya - Pel. Lombok - Pel. Perak - Lamongan - Babat - Bojonegoro)
+            // 2. Render Timeline Rute Perjalanan Truk Fuso (6 Titik)
             for(let i = 1; i <= 6; i++) {
                 let stepEl = document.getElementById(`step-${i}`);
                 let badgeEl = document.getElementById(`badge-${i}`);
@@ -928,6 +958,7 @@
             cloudPendingQueue.forEach((item, index) => {
                 let detailText = '';
                 if(item.type === 'beli') detailText = `<strong>Beli (${item.lot}):</strong> ${item.data.supplier} — ${item.data.berat} Kg @ ${formatRupiah(item.data.harga)} (${item.data.tanggal})`;
+                else if(item.type === 'posisi') detailText = `<strong>Update Posisi Truk (${item.lot}):</strong> Titik ${item.data.titik} — "${item.data.ket}" (${item.data.tanggal})`;
                 else if(item.type === 'biaya') detailText = `<strong>Biaya (${item.lot}):</strong> [${item.data.kategori}] ${item.data.ket} — ${formatRupiah(item.data.nominal)} (${item.data.tanggal})`;
                 else detailText = `<strong>Jual (${item.lot}):</strong> Buyer: ${item.data.pembeli} — ${item.data.berat} Kg @ ${formatRupiah(item.data.harga)} (${item.data.tanggal})`;
 
@@ -968,18 +999,9 @@
             const lot = document.getElementById('input-lot-id').value;
             let data = {};
 
-            let fileInput = document.getElementById(`${type}-foto`);
-            let fotoUrl = '';
-
-            if(fileInput && fileInput.files && fileInput.files[0]) {
-                try {
-                    fotoUrl = await convertFileToBase64(fileInput.files[0]);
-                } catch(err) {
-                    console.error("Gagal membaca foto nota:", err);
-                }
-            }
-
             if(type === 'beli') {
+                let fileInput = document.getElementById('beli-foto');
+                let fotoUrl = (fileInput && fileInput.files[0]) ? await convertFileToBase64(fileInput.files[0]) : '';
                 data = { 
                     tanggal: document.getElementById('beli-tanggal').value, 
                     supplier: document.getElementById('beli-supplier').value, 
@@ -988,7 +1010,15 @@
                     harga: Number(document.getElementById('beli-harga').value),
                     fotoUrl: fotoUrl
                 };
+            } else if(type === 'posisi') {
+                data = {
+                    titik: Number(document.getElementById('posisi-titik').value),
+                    ket: document.getElementById('posisi-ket').value,
+                    tanggal: document.getElementById('posisi-tanggal').value
+                };
             } else if(type === 'biaya') {
+                let fileInput = document.getElementById('biaya-foto');
+                let fotoUrl = (fileInput && fileInput.files[0]) ? await convertFileToBase64(fileInput.files[0]) : '';
                 data = { 
                     tanggal: document.getElementById('biaya-tanggal').value, 
                     kategori: document.getElementById('biaya-kategori').value, 
@@ -997,6 +1027,8 @@
                     fotoUrl: fotoUrl
                 };
             } else if(type === 'jual') {
+                let fileInput = document.getElementById('jual-foto');
+                let fotoUrl = (fileInput && fileInput.files[0]) ? await convertFileToBase64(fileInput.files[0]) : '';
                 data = { 
                     tanggal: document.getElementById('jual-tanggal').value, 
                     pembeli: document.getElementById('jual-pembeli').value, 
@@ -1009,7 +1041,7 @@
 
             try {
                 await addDoc(collection(db, 'trading_tembakau_approval'), { sender, lot, type, data, timestamp: Date.now() });
-                alert('Laporan & Foto Nota berhasil dikirim ke Cloud Database!');
+                alert('Paporan / Info Posisi berhasil dikirim ke Cloud Database!');
                 e.target.reset();
                 switchTab('approval');
             } catch(err) {
@@ -1025,15 +1057,20 @@
 
             try {
                 let lotName = item.lot;
-                let currentLotData = cloudLotsData[lotName] || { status: 'Aktif (Pengumpulan)', beli: [], biaya: [], jual: [] };
+                let currentLotData = cloudLotsData[lotName] || { status: 'Aktif (Pengumpulan)', manualRouteStep: 0, beli: [], biaya: [], jual: [] };
                 
-                if(!currentLotData[item.type]) currentLotData[item.type] = [];
-                currentLotData[item.type].push(item.data);
+                if(item.type === 'posisi') {
+                    // Simpan override posisi manual rute fuso
+                    currentLotData.manualRouteStep = item.data.titik;
+                } else {
+                    if(!currentLotData[item.type]) currentLotData[item.type] = [];
+                    currentLotData[item.type].push(item.data);
+                }
 
                 await setDoc(doc(db, 'trading_tembakau_db', lotName), currentLotData);
                 await deleteDoc(doc(db, 'trading_tembakau_approval', firestoreId));
 
-                alert('Data disetujui dan diperbarui di Cloud Database!');
+                alert('Data disetujui dan posisi fuso diperbarui di Cloud Database!');
             } catch(err) {
                 console.error("Gagal menyetujui:", err);
             }
@@ -1101,16 +1138,16 @@
         }
 
         window.switchInputForm = function(type) {
-            ['beli', 'biaya', 'jual'].forEach(t => {
+            ['beli', 'posisi', 'biaya', 'jual'].forEach(t => {
                 let form = document.getElementById(`form-${t}`);
                 let btn = document.getElementById(`btn-form-${t}`);
                 if(form) form.classList.add('hidden');
-                if(btn) btn.className = 'py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer';
+                if(btn) btn.className = 'py-2 text-[11px] font-bold rounded-lg bg-slate-100 text-slate-700 cursor-pointer';
             });
             let targetForm = document.getElementById(`form-${type}`);
             let targetBtn = document.getElementById(`btn-form-${type}`);
             if(targetForm) targetForm.classList.remove('hidden');
-            if(targetBtn) targetBtn.className = 'py-2 text-xs font-bold rounded-lg bg-amber-900 text-white cursor-pointer';
+            if(targetBtn) targetBtn.className = 'py-2 text-[11px] font-bold rounded-lg bg-amber-900 text-white cursor-pointer';
         }
     </script>
 </body>
