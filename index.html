@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        @media print {
+            body { background: white; }
+            header, button, select, input, footer, .no-print { display: none !important; }
+            .print-only { display: block !important; }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -88,21 +93,43 @@
 
             <!-- DASHBOARD 2: KEUANGAN -->
             <div id="tab-finance" class="hidden space-y-6">
+                <!-- Panel Filter & Cetak PDF -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                        <span class="font-bold text-sm text-slate-700"><i class="fa-solid fa-filter text-amber-800 mr-1"></i> Filter Periode Laporan:</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-500">Dari:</span>
+                            <input type="date" id="filter-start-date" class="p-1.5 border border-slate-300 rounded-lg text-xs bg-slate-50 font-medium">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-500">Sampai:</span>
+                            <input type="date" id="filter-end-date" class="p-1.5 border border-slate-300 rounded-lg text-xs bg-slate-50 font-medium">
+                        </div>
+                        <button onclick="applyDateFilter()" class="px-3 py-1.5 bg-amber-800 text-white rounded-lg text-xs font-bold hover:bg-amber-900 transition cursor-pointer">Terapkan</button>
+                        <button onclick="resetDateFilter()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-lg text-xs font-medium hover:bg-slate-300 transition cursor-pointer">Semua</button>
+                    </div>
+                    <div class="w-full md:w-auto flex justify-end">
+                        <button onclick="generatePDFReport()" class="px-4 py-2 bg-emerald-700 text-white font-bold rounded-lg text-xs hover:bg-emerald-800 transition flex items-center gap-2 cursor-pointer shadow-sm">
+                            <i class="fa-solid fa-file-pdf"></i> Cetak Laporan PDF
+                        </button>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Uang Masuk (Modal & Omzet)</div>
+                        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Uang Masuk (Omzet)</div>
                         <div id="fin-in" class="text-2xl font-bold text-emerald-600 mt-1">Rp 0</div>
-                        <div class="text-xs text-slate-400 mt-2">Masuk ke Rekening Operasional</div>
+                        <div id="fin-in-desc" class="text-xs text-slate-400 mt-2">Periode Keseluruhan</div>
                     </div>
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                         <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Uang Keluar (Belanja & Biaya)</div>
                         <div id="fin-out" class="text-2xl font-bold text-red-600 mt-1">Rp 0</div>
-                        <div class="text-xs text-slate-400 mt-2">Pengeluaran terverifikasi</div>
+                        <div id="fin-out-desc" class="text-xs text-slate-400 mt-2">Periode Keseluruhan</div>
                     </div>
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                         <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Saldo / Net Profit Bersih</div>
                         <div id="fin-net" class="text-2xl font-bold text-blue-600 mt-1">Rp 0</div>
-                        <div class="text-xs text-slate-400 mt-2">Sisa kas & hasil bersih</div>
+                        <div id="fin-net-desc" class="text-xs text-slate-400 mt-2">Periode Keseluruhan</div>
                     </div>
                 </div>
 
@@ -183,6 +210,10 @@
                             <label class="block text-xs font-medium text-slate-700 mb-1">Harga Beli per Kg (IDR)</label>
                             <input type="number" id="beli-harga" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="45000">
                         </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Tanggal Transaksi (DD/MM/YYYY)</label>
+                            <input type="text" id="beli-tanggal" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="12/08/2026">
+                        </div>
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Database</button>
                     </form>
 
@@ -202,6 +233,10 @@
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Nominal Biaya (IDR)</label>
                             <input type="number" id="biaya-nominal" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="8500000">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Tanggal Transaksi (DD/MM/YYYY)</label>
+                            <input type="text" id="biaya-tanggal" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="18/08/2026">
                         </div>
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Database</button>
                     </form>
@@ -225,6 +260,10 @@
                             <label class="block text-xs font-medium text-slate-700 mb-1">Harga Jual per Kg (IDR)</label>
                             <input type="number" id="jual-harga" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="60000">
                         </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Tanggal Transaksi (DD/MM/YYYY)</label>
+                            <input type="text" id="jual-tanggal" required class="w-full p-2 text-sm border border-slate-300 rounded-lg" placeholder="25/08/2026">
+                        </div>
                         <button type="submit" class="w-full py-2.5 bg-amber-900 text-white font-bold rounded-lg text-sm cursor-pointer">Kirim ke Cloud Database</button>
                     </form>
                 </div>
@@ -242,7 +281,6 @@
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Konfigurasi Firebase Anda yang baru (bebas biaya/tanpa billing)
         const firebaseConfig = {
             apiKey: "AIzaSyD8vA0GA3X8KlujMhzj2f7etjNwToheLgI",
             authDomain: "trading-tembakau-free.firebaseapp.com",
@@ -259,6 +297,8 @@
         let activeLot = 'Lot 1';
         let cloudLotsData = {};
         let cloudPendingQueue = [];
+        let dateFilterStart = '';
+        let dateFilterEnd = '';
 
         async function initCloudDatabase() {
             try {
@@ -326,6 +366,46 @@
             return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
+        // Konversi format tanggal DD/MM/YYYY ke timestamp untuk pembanding filter
+        function parseLocalDate(dateStr) {
+            if(!dateStr) return 0;
+            // Jika format DD/MM/YYYY
+            if(dateStr.includes('/')) {
+                let parts = dateStr.split('/');
+                if(parts.length === 3) {
+                    return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`).getTime();
+                }
+            }
+            // Jika format YYYY-MM-DD
+            let d = new Date(dateStr);
+            return isNaN(d.getTime()) ? 0 : d.getTime();
+        }
+
+        function isWithinFilter(tanggalStr) {
+            if(!dateFilterStart && !dateFilterEnd) return true;
+            let itemTime = parseLocalDate(tanggalStr);
+            if(!itemTime) return true;
+
+            let startTime = dateFilterStart ? new Date(dateFilterStart).getTime() : 0;
+            let endTime = dateFilterEnd ? new Date(dateFilterEnd).getTime() + 86400000 : Number.MAX_SAFE_INTEGER;
+
+            return itemTime >= startTime && itemTime <= endTime;
+        }
+
+        window.applyDateFilter = function() {
+            dateFilterStart = document.getElementById('filter-start-date').value;
+            dateFilterEnd = document.getElementById('filter-end-date').value;
+            renderDashboardFinance();
+        }
+
+        window.resetDateFilter = function() {
+            document.getElementById('filter-start-date').value = '';
+            document.getElementById('filter-end-date').value = '';
+            dateFilterStart = '';
+            dateFilterEnd = '';
+            renderDashboardFinance();
+        }
+
         window.renderAll = function() {
             initLotDropdowns();
             renderDashboardOps();
@@ -380,9 +460,13 @@
             const currentLotData = cloudLotsData[activeLot];
             if(!currentLotData) return;
 
-            let totalBeli = (currentLotData.beli || []).reduce((sum, item) => sum + (item.berat * item.harga), 0);
-            let totalBiaya = (currentLotData.biaya || []).reduce((sum, item) => sum + item.nominal, 0);
-            let totalOmzet = (currentLotData.jual || []).reduce((sum, item) => sum + (item.berat * item.harga), 0);
+            let filteredBeli = (currentLotData.beli || []).filter(item => isWithinFilter(item.tanggal));
+            let filteredBiaya = (currentLotData.biaya || []).filter(item => isWithinFilter(item.tanggal));
+            let filteredJual = (currentLotData.jual || []).filter(item => isWithinFilter(item.tanggal));
+
+            let totalBeli = filteredBeli.reduce((sum, item) => sum + (item.berat * item.harga), 0);
+            let totalBiaya = filteredBiaya.reduce((sum, item) => sum + item.nominal, 0);
+            let totalOmzet = filteredJual.reduce((sum, item) => sum + (item.berat * item.harga), 0);
 
             let totalKeluar = totalBeli + totalBiaya;
             let totalMasuk = totalOmzet;
@@ -392,11 +476,16 @@
             document.getElementById('fin-out').innerText = formatRupiah(totalKeluar);
             document.getElementById('fin-net').innerText = formatRupiah(netProfit);
 
+            let descText = (dateFilterStart || dateFilterEnd) ? `Periode: ${dateFilterStart || 'Awal'} s.d. ${dateFilterEnd || 'Sekarang'}` : 'Periode Keseluruhan';
+            document.getElementById('fin-in-desc').innerText = descText;
+            document.getElementById('fin-out-desc').innerText = descText;
+            document.getElementById('fin-net-desc').innerText = descText;
+
             const tbody = document.getElementById('table-cashflow');
             if(!tbody) return;
             tbody.innerHTML = '';
 
-            (currentLotData.beli || []).forEach(item => {
+            filteredBeli.forEach(item => {
                 let sub = item.berat * item.harga;
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50">
@@ -409,7 +498,7 @@
                 `;
             });
 
-            (currentLotData.biaya || []).forEach(item => {
+            filteredBiaya.forEach(item => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50">
                         <td class="p-3">${item.tanggal}</td>
@@ -421,7 +510,7 @@
                 `;
             });
 
-            (currentLotData.jual || []).forEach(item => {
+            filteredJual.forEach(item => {
                 let sub = item.berat * item.harga;
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50">
@@ -435,8 +524,126 @@
             });
 
             if(tbody.innerHTML === '') {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada transaksi keuangan pada lot ini.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada transaksi keuangan pada periode/lot ini.</td></tr>`;
             }
+        }
+
+        window.generatePDFReport = function() {
+            const currentLotData = cloudLotsData[activeLot];
+            if(!currentLotData) return;
+
+            let filteredBeli = (currentLotData.beli || []).filter(item => isWithinFilter(item.tanggal));
+            let filteredBiaya = (currentLotData.biaya || []).filter(item => isWithinFilter(item.tanggal));
+            let filteredJual = (currentLotData.jual || []).filter(item => isWithinFilter(item.tanggal));
+
+            let totalBeli = filteredBeli.reduce((sum, item) => sum + (item.berat * item.harga), 0);
+            let totalBiaya = filteredBiaya.reduce((sum, item) => sum + item.nominal, 0);
+            let totalOmzet = filteredJual.reduce((sum, item) => sum + (item.berat * item.harga), 0);
+            let totalKeluar = totalBeli + totalBiaya;
+            let netProfit = totalOmzet - totalKeluar;
+
+            let periodeStr = (dateFilterStart || dateFilterEnd) ? `${dateFilterStart || 'Awal'} s.d. ${dateFilterEnd || 'Sekarang'}` : 'Seluruh Periode';
+
+            let printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Laporan Keuangan - ${activeLot}</title>
+                    <style>
+                        body { font-family: sans-serif; color: #1e293b; padding: 20px; }
+                        h1 { font-size: 18px; margin-bottom: 5px; color: #78350f; }
+                        p { font-size: 12px; color: #64748b; margin-top: 0; }
+                        .summary { display: flex; gap: 15px; margin: 20px 0; }
+                        .box { border: 1px solid #cbd5e1; padding: 12px; border-radius: 8px; flex: 1; }
+                        .box div:first-child { font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: bold; }
+                        .box div:last-child { font-size: 16px; font-weight: bold; margin-top: 4px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                        th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
+                        th { background-color: #f1f5f9; text-transform: uppercase; font-size: 10px; }
+                        .text-right { text-align: right; }
+                        .footer { margin-top: 30px; font-size: 10px; text-align: center; color: #94a3b8; }
+                    </style>
+                </head>
+                <body>
+                    <h1>LAPORAN KEUANGAN TRADING TEMBAKAU (${activeLot})</h1>
+                    <p>Periode: ${periodeStr} | Dicetak pada: ${new Date().toLocaleDateString('id-ID')}</p>
+                    
+                    <div class="summary">
+                        <div class="box">
+                            <div>Total Uang Masuk</div>
+                            <div style="color: #059669;">${formatRupiah(totalOmzet)}</div>
+                        </div>
+                        <div class="box">
+                            <div>Total Uang Keluar</div>
+                            <div style="color: #dc2626;">${formatRupiah(totalKeluar)}</div>
+                        </div>
+                        <div class="box">
+                            <div>Net Profit Bersih</div>
+                            <div style="color: #2563eb;">${formatRupiah(netProfit)}</div>
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Jenis Transaksi</th>
+                                <th>Keterangan Rinci</th>
+                                <th class="text-right">Masuk (Debit)</th>
+                                <th class="text-right">Keluar (Kredit)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `);
+
+            filteredBeli.forEach(item => {
+                printWindow.document.write(`
+                    <tr>
+                        <td>${item.tanggal}</td>
+                        <td>Belanja (Beli)</td>
+                        <td>Pembelian tembakau dari ${item.supplier} (${item.berat} Kg)</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">${formatRupiah(item.berat * item.harga)}</td>
+                    </tr>
+                `);
+            });
+
+            filteredBiaya.forEach(item => {
+                printWindow.document.write(`
+                    <tr>
+                        <td>${item.tanggal}</td>
+                        <td>${item.kategori}</td>
+                        <td>${item.ket}</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">${formatRupiah(item.nominal)}</td>
+                    </tr>
+                `);
+            });
+
+            filteredJual.forEach(item => {
+                printWindow.document.write(`
+                    <tr>
+                        <td>${item.tanggal}</td>
+                        <td>Omzet (Jual)</td>
+                        <td>Penjualan ke ${item.pembeli} (${item.berat} Kg)</td>
+                        <td class="text-right">${formatRupiah(item.berat * item.harga)}</td>
+                        <td class="text-right">-</td>
+                    </tr>
+                `);
+            });
+
+            printWindow.document.write(`
+                        </tbody>
+                    </table>
+                    <div class="footer">Sistem Cloud Trading Tembakau &copy; 2026</div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
         }
 
         function renderApprovalQueue() {
@@ -456,9 +663,9 @@
 
             cloudPendingQueue.forEach((item, index) => {
                 let detailText = '';
-                if(item.type === 'beli') detailText = `<strong>Beli (${item.lot}):</strong> ${item.data.supplier} — ${item.data.berat} Kg @ ${formatRupiah(item.data.harga)}`;
-                else if(item.type === 'biaya') detailText = `<strong>Biaya (${item.lot}):</strong> [${item.data.kategori}] ${item.data.ket} — ${formatRupiah(item.data.nominal)}`;
-                else detailText = `<strong>Jual (${item.lot}):</strong> Buyer: ${item.data.pembeli} — ${item.data.berat} Kg @ ${formatRupiah(item.data.harga)}`;
+                if(item.type === 'beli') detailText = `<strong>Beli (${item.lot}):</strong> ${item.data.supplier} — ${item.data.berat} Kg @ ${formatRupiah(item.data.harga)} (${item.data.tanggal})`;
+                else if(item.type === 'biaya') detailText = `<strong>Biaya (${item.lot}):</strong> [${item.data.kategori}] ${item.data.ket} — ${formatRupiah(item.data.nominal)} (${item.data.tanggal})`;
+                else detailText = `<strong>Jual (${item.lot}):</strong> Buyer: ${item.data.pembeli} — ${item.data.berat} Kg @ ${formatRupiah(item.data.harga)} (${item.data.tanggal})`;
 
                 container.innerHTML += `
                     <div class="p-4 border border-slate-200 rounded-xl bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -479,15 +686,14 @@
             e.preventDefault();
             const sender = document.getElementById('input-sender').value;
             const lot = document.getElementById('input-lot-id').value;
-            const today = new Date().toLocaleDateString('id-ID');
             let data = {};
 
             if(type === 'beli') {
-                data = { tanggal: today, supplier: document.getElementById('beli-supplier').value, grade: document.getElementById('beli-grade').value, berat: Number(document.getElementById('beli-berat').value), harga: Number(document.getElementById('beli-harga').value) };
+                data = { tanggal: document.getElementById('beli-tanggal').value, supplier: document.getElementById('beli-supplier').value, grade: document.getElementById('beli-grade').value, berat: Number(document.getElementById('beli-berat').value), harga: Number(document.getElementById('beli-harga').value) };
             } else if(type === 'biaya') {
-                data = { tanggal: today, kategori: document.getElementById('biaya-kategori').value, ket: document.getElementById('biaya-ket').value, nominal: Number(document.getElementById('biaya-nominal').value) };
+                data = { tanggal: document.getElementById('biaya-tanggal').value, kategori: document.getElementById('biaya-kategori').value, ket: document.getElementById('biaya-ket').value, nominal: Number(document.getElementById('biaya-nominal').value) };
             } else if(type === 'jual') {
-                data = { tanggal: today, pembeli: document.getElementById('jual-pembeli').value, grade: document.getElementById('jual-grade').value, berat: Number(document.getElementById('jual-berat').value), harga: Number(document.getElementById('jual-harga').value) };
+                data = { tanggal: document.getElementById('jual-tanggal').value, pembeli: document.getElementById('jual-pembeli').value, grade: document.getElementById('jual-grade').value, berat: Number(document.getElementById('jual-berat').value), harga: Number(document.getElementById('jual-harga').value) };
             }
 
             try {
